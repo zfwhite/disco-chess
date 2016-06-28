@@ -10,10 +10,10 @@
   width: : 80px;
   border: 1px solid black;
 }
-.white {
+.light {
   font-size: 50px;
 }
-.black {
+.dark {
   background-color: grey;
   font-size: 50px;
 }

@@ -17,11 +17,11 @@ var Chess = function() {
       $('#board-placement').append('<div id='+rows+' class=row></div>');
       for (var cols = 0; cols < 8; cols++) {
         if (rows + cols == 0) {
-          $('#'+rows).append("<div id='" + rows + ',' + cols + "' class='grid col-xs-1 white square'></div>");
+          $('#'+rows).append("<div id='" + rows + ',' + cols + "' class='grid col-xs-1 light square'></div>");
         } else if ((rows + cols) % 2 == 0 ) {
-          $('#'+rows).append("<div id='" + rows + ',' + cols + "' class='grid col-xs-1 white square'></div>");
+          $('#'+rows).append("<div id='" + rows + ',' + cols + "' class='grid col-xs-1 light square'></div>");
         } else {
-          $('#'+rows).append("<div id='" + rows + ',' + cols + "' class='grid col-xs-1 black square'></div>");
+          $('#'+rows).append("<div id='" + rows + ',' + cols + "' class='grid col-xs-1 dark square'></div>");
         }
       }
     }
@@ -117,11 +117,12 @@ var h6 = new Square('2,7');
 var h7 = new Square('1,7');
 var h8 = new Square('0,7');
 
-var Rook = function(startingPosition, appearance) {
+var Rook = function(startingPosition, appearance, color) {
   var self = this;
   this.initialPosition = function() {
     var place = document.getElementById(startingPosition);
     $(place).html(appearance);
+    $(place).addClass(color);
     // var add = document.createElement('div');
     // add.innerHTML = appearance;
     // place.appendChild(add);
@@ -137,12 +138,12 @@ var Rook = function(startingPosition, appearance) {
 }
 
 //white rooks
-var rookA1 = new Rook('7,0', '&#9814;');
-var rookH1 = new Rook('7,7', '&#9814;');
+var rookA1 = new Rook('7,0', '&#9814;', 'white');
+var rookH1 = new Rook('7,7', '&#9814;', 'white');
 rookH1.initialPosition();
 rookA1.initialPosition();
 //black rooks
-var rookA8 = new Rook('0,0', '&#9820;');
-var rookH8 = new Rook('0,7', '&#9820;');
+var rookA8 = new Rook('0,0', '&#9820;', 'black');
+var rookH8 = new Rook('0,7', '&#9820;', 'black');
 rookH8.initialPosition();
 rookA8.initialPosition();
