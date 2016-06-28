@@ -1,12 +1,31 @@
 var chessBoard = document.getElementById('board-placement');
 var squared = [];
 
+var WhitePlayer = function() {
+  this.turn = 'ready';
+
+  // this.move = function() {
+  // }
+}
+
+var BlackPlayer = function() {
+  this.turn = 'waiting';
+}
+
 var Square = function(position) {
   var position = document.getElementById(position);
   var self = this;
 
+  this.piece = function() {
+    if ($(position).hasClass('rook')) {
+      console.log('true');
+    } else {
+      console.log('false');
+    }
+  }
+
   this.show = function() {
-    console.log(position.id);
+    console.log(position.textContent);
   }
 }
 
@@ -37,8 +56,42 @@ var board = new Chess();
 board.draw();
 board.get();
 
+var Rook = function(startingPosition, appearance, color) {
+  var self = this;
+  this.initialPosition = function() {
+    var place = document.getElementById(startingPosition);
+    $(place).html(appearance);
+    $(place).addClass(color);
+    $(place).addClass('rook');
+    // var add = document.createElement('div');
+    // add.innerHTML = appearance;
+    // place.appendChild(add);
+  }
+
+  // this.currentLocation = function() {
+  //
+  // }
+  //
+  // this.move() {
+  //
+  // }
+}
+
+//white rooks
+var rookA1 = new Rook('7,0', '&#9814;', 'white');
+var rookH1 = new Rook('7,7', '&#9814;', 'white');
+rookH1.initialPosition();
+rookA1.initialPosition();
+//black rooks
+var rookA8 = new Rook('0,0', '&#9820;', 'black');
+var rookH8 = new Rook('0,7', '&#9820;', 'black');
+rookH8.initialPosition();
+rookA8.initialPosition();
+
 //A
 var a1 = new Square('7,0');
+a1.show();
+a1.piece();
 var a2 = new Square('6,0');
 var a3 = new Square('5,0');
 var a4 = new Square('4,0');
@@ -116,34 +169,3 @@ var h5 = new Square('3,7');
 var h6 = new Square('2,7');
 var h7 = new Square('1,7');
 var h8 = new Square('0,7');
-
-var Rook = function(startingPosition, appearance, color) {
-  var self = this;
-  this.initialPosition = function() {
-    var place = document.getElementById(startingPosition);
-    $(place).html(appearance);
-    $(place).addClass(color);
-    // var add = document.createElement('div');
-    // add.innerHTML = appearance;
-    // place.appendChild(add);
-  }
-
-  // this.currentLocation = function() {
-  //
-  // }
-  //
-  // this.move() {
-  //
-  // }
-}
-
-//white rooks
-var rookA1 = new Rook('7,0', '&#9814;', 'white');
-var rookH1 = new Rook('7,7', '&#9814;', 'white');
-rookH1.initialPosition();
-rookA1.initialPosition();
-//black rooks
-var rookA8 = new Rook('0,0', '&#9820;', 'black');
-var rookH8 = new Rook('0,7', '&#9820;', 'black');
-rookH8.initialPosition();
-rookA8.initialPosition();
