@@ -12,7 +12,6 @@ var sprite = {
   blackknight: '&#9822;',
   blackpawn: '&#9823;'
 };
-
 var Board = function() {
   this.squares = [];
   var self = this;
@@ -83,6 +82,7 @@ var Board = function() {
             var theSquare = document.createElement('div');
             theSquare.classList.add('col-xs-1');
             theSquare.classList.add(square.color);
+            theSquare.setAttribute('id', row + ',' + column);
             //set the pieces
             if (square.piece.piece === undefined) {
               theSquare.textContent = '';
@@ -99,6 +99,8 @@ var Board = function() {
       }
     }
   }
+  this.move = function() {
+  }
 }
 var Square = function(row, column, color) {
   return {
@@ -112,5 +114,63 @@ var Piece = function(type, color) {
   this.type = type,
   this.color = color
 }
-var myBoard = new Board();
-myBoard.boardHTML();
+var Game = function(players) {
+  this.board = new Board();
+  this.players = players;
+  this.currentPlayer = {};
+  this.currentPiece = {};
+  this.state = '';
+  var self = this;
+  this.start = function() {
+    // Draw the board.
+    this.board.boardHTML();
+    // Set the player to white for the first turn.
+    players.forEach(function(player) {
+      if (player.color == 'white') {
+        self.currentPlayer = player;
+      }
+    });
+    // Set state to selecting.
+    self.state = 'selecting'
+  }
+  this.nextTurn = function() {
+    players.forEach(function(player) {
+      if (player.name !== self.currentPlayer.name) {
+        self.currentPlayer = player;
+      }
+    });
+  }
+}
+var Player = function(name, color) {
+  this.name = name;
+  this.color = color;
+}
+var ron = new Player('Ron', 'white');
+var zach = new Player('Zach', 'black')
+var myGame = new Game([ron, zach]);
+myGame.start();
+
+var GameInformation = function() {
+  this.information = function() {
+    var information = document.createElement('div');
+    information.classList.add('col-xs-2');
+    information.textContent = myGame.currentPlayer.color + ' is ' + myGame.state;
+    $('#information').append(information);
+  }
+}
+var play = new GameInformation();
+play.information();
+
+var board = document.getElementById('board-placement');
+board.addEventListener('click', function(theEvent) {
+  var coordinate = theEvent.target.getAttribute('id').split(',');
+  var row = coordinate[0];
+  var column = coordinate[1];
+  if (myGame.state == 'selecting') {
+    myGame.board.squares.forEach(function(square) {
+      if (square.row == row && square.column == column) {
+        console.log(square);
+      }
+    });
+  }
+});
