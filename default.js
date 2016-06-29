@@ -18,7 +18,9 @@ var Square = function(position) {
 
   this.piece = function() {
     if ($(position).hasClass('rook')) {
-      console.log('true');
+      position.addEventListener('click', function(e) {
+
+      })
     } else {
       console.log('false');
     }
@@ -36,11 +38,11 @@ var Chess = function() {
       $('#board-placement').append('<div id='+rows+' class=row></div>');
       for (var cols = 0; cols < 8; cols++) {
         if (rows + cols == 0) {
-          $('#'+rows).append("<div id='" + rows + ',' + cols + "' class='grid col-xs-1 light square'></div>");
+          $('#'+rows).append("<div id='" + rows + ',' + cols + "' class='grid col-xs-1 light square empty'></div>");
         } else if ((rows + cols) % 2 == 0 ) {
-          $('#'+rows).append("<div id='" + rows + ',' + cols + "' class='grid col-xs-1 light square'></div>");
+          $('#'+rows).append("<div id='" + rows + ',' + cols + "' class='grid col-xs-1 light square empty'></div>");
         } else {
-          $('#'+rows).append("<div id='" + rows + ',' + cols + "' class='grid col-xs-1 dark square'></div>");
+          $('#'+rows).append("<div id='" + rows + ',' + cols + "' class='grid col-xs-1 dark square empty'></div>");
         }
       }
     }
@@ -62,10 +64,40 @@ var Rook = function(startingPosition, appearance, color) {
     var place = document.getElementById(startingPosition);
     $(place).html(appearance);
     $(place).addClass(color);
+    $(place).removeClass('empty');
     $(place).addClass('rook');
     // var add = document.createElement('div');
     // add.innerHTML = appearance;
     // place.appendChild(add);
+  }
+
+  this.moves = function(position) {
+    var coordinates = position.split(',');
+    console.log(coordinates);
+    var legalMoves = []
+    var remove = [];
+    switch(coordinates[0]) {
+      case '0':
+        for (let i = 0; i < 8; i++) {
+          for (let j = 0; j < 8; j++) {
+            var first = i.toString();
+            var second = j.toString();
+            var getId = first + ',' + second;
+            var check = document.getElementById(getId);
+            if ($(check).hasClass('empty') && first == '0') {
+              //add to possible moves!!!!
+              legalMoves.push(check);
+            } else if ($(check).hasClass('empty') != -1 && check.id != position && first == '0') {
+              remove.push(legalMoves.length);
+              console.log(legalMoves.length);
+            }
+          }
+        }
+        legalMoves.splice(remove[0]);
+        break;
+    }
+    console.log(remove);
+    console.log(legalMoves);
   }
 
   // this.currentLocation = function() {
@@ -85,8 +117,12 @@ rookA1.initialPosition();
 //black rooks
 var rookA8 = new Rook('0,0', '&#9820;', 'black');
 var rookH8 = new Rook('0,7', '&#9820;', 'black');
+var test = new Rook('0,3', '&#9820;', 'black');
+test.initialPosition();
 rookH8.initialPosition();
 rookA8.initialPosition();
+rookA8.moves('0,0');
+// rookH8.moves('0,7');
 
 //A
 var a1 = new Square('7,0');
