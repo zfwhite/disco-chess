@@ -87,9 +87,14 @@ var Rook = function(startingPosition, appearance, color) {
             if ($(check).hasClass('empty') && first == '0') {
               //add to possible moves!!!!
               legalMoves.push(check);
-            } else if ($(check).hasClass('empty') != -1 && check.id != position && first == '0') {
+            } else if ($(check).hasClass('empty') != -1 && check.id != position && first == '0' && $(check).hasClass('black')) {
+              //collision detection against other pieces
               remove.push(legalMoves.length);
               console.log(legalMoves.length);
+            } else if ($(check).hasClass('empty') != -1 && check.id != position && first == '0' && $(check).hasClass('white')) {
+              legalMoves.push(check);
+              remove.push(legalMoves.length);
+              console.log(check.id);
             }
           }
         }
@@ -117,7 +122,7 @@ rookA1.initialPosition();
 //black rooks
 var rookA8 = new Rook('0,0', '&#9820;', 'black');
 var rookH8 = new Rook('0,7', '&#9820;', 'black');
-var test = new Rook('0,3', '&#9820;', 'black');
+var test = new Rook('0,3', '&#9820;', 'white');
 test.initialPosition();
 rookH8.initialPosition();
 rookA8.initialPosition();
