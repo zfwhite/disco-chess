@@ -5,7 +5,7 @@
   margin-right: 20%;
   margin-left: 20%;
 }
-.square {
+.col-xs-1 {
   min-height: 80px;
   width: : 80px;
   border: 1px solid black;
@@ -16,6 +16,4 @@
 .dark {
   background-color: grey;
   font-size: 50px;
-}
-.spacing {
 }
