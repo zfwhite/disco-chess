@@ -2,15 +2,25 @@ var chessBoard = document.getElementById('board-placement');
 var squared = [];
 
 var WhitePlayer = function() {
-  this.turn = 'ready';
+  this.turn = function(state) {
+    console.log(state);
+    return state;
+  }
 
   // this.move = function() {
   // }
 }
 
 var BlackPlayer = function() {
-  this.turn = 'waiting';
+  this.turn = function(state) {
+    return state;
+  }
 }
+
+var whitePlayer = new WhitePlayer();
+var blackPlayer = new BlackPlayer();
+whitePlayer.turn('ready');
+blackPlayer.turn('waiting');
 
 var Square = function(position) {
   var position = document.getElementById(position);
@@ -49,7 +59,24 @@ var Chess = function() {
   }
   this.get = function() {
     chessBoard.addEventListener('click', function(e) {
-      console.log(e.target.id);
+      var clicked = e.target;
+      if ($(clicked).hasClass('rook')) {
+        if ($(clicked).hasClass('0,0')) {
+          rookA8.moves(clicked.id, 'black');
+          console.log(clicked);
+        } else if ($(clicked).hasClass('0,7')) {
+          rookH8.moves(clicked.id, 'black');
+          console.log(clicked);
+        } else if ($(clicked).hasClass('7,7')) {
+          rookH1.moves(clicked.id, 'white');
+          console.log(clicked);
+        } else if ($(clicked).hasClass('7,0')) {
+          rookA1.moves(clicked.id, 'white');
+          console.log(clicked);
+        }
+      } else {
+        console.log('no');
+      }
     });
   }
 }
@@ -64,6 +91,7 @@ var Rook = function(startingPosition, appearance, color) {
     var place = document.getElementById(startingPosition);
     $(place).html(appearance);
     $(place).addClass(color);
+    $(place).addClass(startingPosition);
     $(place).removeClass('empty');
     $(place).addClass('rook');
     // var add = document.createElement('div');
@@ -71,47 +99,150 @@ var Rook = function(startingPosition, appearance, color) {
     // place.appendChild(add);
   }
 
-  this.moves = function(position) {
+  this.moves = function(position, color) {
+    if (color === 'white') {
+      var notColor = 'black';
+    } else {
+      var notColor = 'white'
+    }
     var coordinates = position.split(',');
-    console.log(coordinates);
-    var legalMoves = []
-    var remove = [];
-    switch(coordinates[0]) {
-      case '0':
+    var located = document.getElementById(position);
+    var legalMovesX = []
+    var removeX = [];
+
+//problem with checkX and coordinate location needs to be fixed
+    for (let u = 0; u < 8; u++) {
+      var checkX = u.toString();
+      if (coordinates[0] == u) {
         for (let i = 0; i < 8; i++) {
           for (let j = 0; j < 8; j++) {
             var first = i.toString();
             var second = j.toString();
             var getId = first + ',' + second;
             var check = document.getElementById(getId);
-            if ($(check).hasClass('empty') && first == '0') {
+            if ($(check).hasClass('empty') && first == checkX) {
               //add to possible moves!!!!
-              legalMoves.push(check);
-            } else if ($(check).hasClass('empty') != -1 && check.id != position && first == '0' && $(check).hasClass('black')) {
+              legalMovesX.push(check);
+            } else if ($(check).hasClass('empty') != -1 && check.id != position && first == checkX && $(check).hasClass(color)) {
               //collision detection against other pieces
-              remove.push(legalMoves.length);
-              console.log(legalMoves.length);
-            } else if ($(check).hasClass('empty') != -1 && check.id != position && first == '0' && $(check).hasClass('white')) {
-              legalMoves.push(check);
-              remove.push(legalMoves.length);
-              console.log(check.id);
+              removeX.push(legalMovesX.length);
+            } else if ($(check).hasClass('empty') != -1 && check.id != position && first == checkX && $(check).hasClass(notColor)) {
+              legalMovesX.push(check);
+              removeX.push(legalMovesX.length);
             }
           }
         }
-        legalMoves.splice(remove[0]);
-        break;
+        legalMovesX.splice(removeX[0]);
+      }
     }
-    console.log(remove);
-    console.log(legalMoves);
-  }
 
-  // this.currentLocation = function() {
-  //
-  // }
-  //
-  // this.move() {
-  //
-  // }
+    var legalMovesY = []
+    var removeY = [];
+    for (let p = 0; p < 8; p++) {
+      var checkY = p.toString();
+      if (coordinates[1] == p) {
+        for (let i = 0; i < 8; i++) {
+          for (let j = 0; j < 8; j++) {
+            var first = i.toString();
+            var second = j.toString();
+            var getId = first + ',' + second;
+            var check = document.getElementById(getId);
+            if ($(check).hasClass('empty') && second == checkY) {
+              //add to possible moves!!!!
+              legalMovesY.push(check);
+            } else if ($(check).hasClass('empty') != -1 && check.id != position && second == checkY && $(check).hasClass('black')) {
+              //collision detection against other pieces
+              removeY.push(legalMovesY.length);
+            } else if ($(check).hasClass('empty') != -1 && check.id != position && second == checkY && $(check).hasClass('white')) {
+              legalMovesY.push(check);
+              removeY.push(legalMovesY.length);
+            }
+          }
+        }
+        legalMovesY.splice(removeY[0]);
+      }
+    }
+    var legalMoves = legalMovesX.concat(legalMovesY);
+    console.log(legalMoves);
+
+    // switch(coordinates[0]) {
+    //   case '0':
+    //     for (let i = 0; i < 8; i++) {
+    //       for (let j = 0; j < 8; j++) {
+    //         var first = i.toString();
+    //         var second = j.toString();
+    //         var getId = first + ',' + second;
+    //         var check = document.getElementById(getId);
+    //         if ($(check).hasClass('empty') && first == '0') {
+    //           //add to possible moves!!!!
+    //           legalMovesX.push(check);
+    //         } else if ($(check).hasClass('empty') != -1 && check.id != position && first == '0' && $(check).hasClass(color)) {
+    //           //collision detection against other pieces
+    //           removeX.push(legalMovesX.length);
+    //         } else if ($(check).hasClass('empty') != -1 && check.id != position && first == '0' && $(check).hasClass(notColor)) {
+    //           legalMovesX.push(check);
+    //           removeX.push(legalMovesX.length);
+    //         }
+    //       }
+    //     }
+    //     legalMovesX.splice(removeX[0]);
+    //     break;
+    //
+    //     case '7':
+    //       for (let i = 0; i < 8; i++) {
+    //         for (let j = 0; j < 8; j++) {
+    //           var first = i.toString();
+    //           var second = j.toString();
+    //           var getId = first + ',' + second;
+    //           var check = document.getElementById(getId);
+    //           if ($(check).hasClass('empty') && first == '7') {
+    //             //add to possible moves!!!!
+    //             legalMovesX.push(check);
+    //           } else if ($(check).hasClass('empty') != -1 && check.id != position && first == '7' && $(check).hasClass(color)) {
+    //             //collision detection against other pieces
+    //             removeX.push(legalMovesX.length);
+    //           } else if ($(check).hasClass('empty') != -1 && check.id != position && first == '7' && $(check).hasClass(notColor)) {
+    //             legalMovesX.push(check);
+    //             removeX.push(legalMovesX.length);
+    //           }
+    //         }
+    //       }
+    //       legalMovesX.splice(removeX[0]);
+    //       break;
+    // }
+
+    // switch(coordinates[1]) {
+    //   case '0':
+    //     for (let i = 0; i < 8; i++) {
+    //       for (let j = 0; j < 8; j++) {
+    //         var first = i.toString();
+    //         var second = j.toString();
+    //         var getId = first + ',' + second;
+    //         var check = document.getElementById(getId);
+    //         if ($(check).hasClass('empty') && second == '0') {
+    //           //add to possible moves!!!!
+    //           legalMovesY.push(check);
+    //         } else if ($(check).hasClass('empty') != -1 && check.id != position && second == '0' && $(check).hasClass('black')) {
+    //           //collision detection against other pieces
+    //           removeY.push(legalMovesY.length);
+    //         } else if ($(check).hasClass('empty') != -1 && check.id != position && second == '0' && $(check).hasClass('white')) {
+    //           legalMovesY.push(check);
+    //           removeY.push(legalMovesY.length);
+    //         }
+    //       }
+    //     }
+    //     legalMovesY.splice(removeY[0]);
+    //     break;
+    // }
+
+    //all legal moves for the rook
+
+    // located.addEventListener('click', function(e) {
+    //   // var use = whitePlayer.turn();
+    //   console.log(whitePlayer);
+    // })
+
+  }
 }
 
 //white rooks
@@ -122,11 +253,11 @@ rookA1.initialPosition();
 //black rooks
 var rookA8 = new Rook('0,0', '&#9820;', 'black');
 var rookH8 = new Rook('0,7', '&#9820;', 'black');
-var test = new Rook('0,3', '&#9820;', 'white');
+var test = new Rook('0,3', '&#9814;', 'white');
 test.initialPosition();
 rookH8.initialPosition();
 rookA8.initialPosition();
-rookA8.moves('0,0');
+// rookA8.moves('0,0');
 // rookH8.moves('0,7');
 
 //A
