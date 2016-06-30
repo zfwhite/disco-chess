@@ -171,13 +171,30 @@ var Game = function(players) {
       var column = coordinate[1];
       myGame.board.squares.forEach(function(square) {
         if (square.row == row && square.column == column) {
-          myGame.state = 'moving';
-          myGame.currentPiece = square.piece;
-          var moveSet = new MoveSets();
-          switch (square.piece.piece.type) {
-            case "pawn":
-              moveSet.pawn(square.piece.position[0] + "," + square.piece.position[1], square.piece.piece.color);
-              break;
+          if (square.piece.piece != undefined) {
+            myGame.state = 'moving';
+            myGame.currentPiece = square.piece;
+            var moveSet = new MoveSets();
+            switch (square.piece.piece.type) {
+              case "pawn":
+                console.log(moveSet.pawn(square.piece.position[0] + "," + square.piece.position[1], square.piece.piece.color));
+                break;
+              case "rook":
+                console.log(moveSet.rook(square.piece.position[0] + "," + square.piece.position[1]));
+                break;
+              case "knight":
+                console.log(moveSet.knight(square.piece.position[0] + "," + square.piece.position[1]));
+                break;
+              case "bishop":
+                console.log(moveSet.bishop(square.piece.position[0] + "," + square.piece.position[1]));
+                break;
+              case "queen":
+                console.log(moveSet.queen(square.piece.position[0] + "," + square.piece.position[1]));
+                break;
+              case "king":
+                console.log(moveSet.king(square.piece.position[0] + "," + square.piece.position[1]));
+                break;
+            }
           }
         }
       });
@@ -227,6 +244,7 @@ var MoveSets = function() {
     }
     var remove = possibleMoves.indexOf(location);
     possibleMoves.splice(remove, 1);
+    return possibleMoves;
   }
   this.rook = function(location) {
     var coordinate = location.split(',');
@@ -245,6 +263,7 @@ var MoveSets = function() {
     }
     var remove = possibleMoves.indexOf(location);
     possibleMoves.splice(remove, 1);
+    return possibleMoves;
   }
   this.bishop = function(location) {
     var coordinate = location.split(',');
@@ -263,6 +282,7 @@ var MoveSets = function() {
     }
     var remove = possibleMoves.indexOf(location);
     possibleMoves.splice(remove, 1);
+    return possibleMoves;
   }
   this.knight = function(location) {
     var coordinate = location.split(',');
@@ -283,6 +303,7 @@ var MoveSets = function() {
         }
       }
     }
+    return possibleMoves;
   }
   this.queen = function(location) {
     var coordinate = location.split(',');
@@ -305,6 +326,7 @@ var MoveSets = function() {
     }
     var remove = possibleMoves.indexOf(location);
     possibleMoves.splice(remove, 1);
+    return possibleMoves;
   }
   this.pawn = function(location, color) {
     var coordinate = location.split(',');
