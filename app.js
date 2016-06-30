@@ -151,6 +151,7 @@ myGame.start();
 //shows whose turn it is and what state the game is in
 var GameInformation = function() {
   this.information = function() {
+    $('#information').empty();
     var information = document.createElement('div');
     information.classList.add('col-xs-2');
     information.textContent = myGame.currentPlayer.color + ' is ' + myGame.state;
@@ -242,9 +243,62 @@ var MoveSets = function() {
         }
       }
     }
-    console.log(possibleMoves);
+  }
+
+  this.queen = function(location) {
+    var coordinate = location.split(',');
+    var x = parseInt(coordinate[0]);
+    var y = parseInt(coordinate[1]);
+    var possibleMoves = [];
+
+    for (var row = 0; row <= 7; row++) {
+      for (var column = 0; column <= 7; column++) {
+        var legal = row.toString() + ',' + column.toString();
+        if (row - x === column - y) {
+          possibleMoves.push(legal);
+        } else if (column + row === y + x) {
+          possibleMoves.push(legal);
+        } else if (row === x) {
+          possibleMoves.push(legal);
+        } else if (column === y) {
+          possibleMoves.push(legal);
+        }
+      }
+    }
+    var remove = possibleMoves.indexOf(location);
+    possibleMoves.splice(remove, 1);
+  }
+
+  this.pawn = function(location, color) {
+    var coordinate = location.split(',');
+    var x = parseInt(coordinate[0]);
+    var y = parseInt(coordinate[1]);
+    var possibleMoves = [];
+
+    for (var row = 0; row <= 7; row++) {
+      for (var column = 0; column <= 7; column++) {
+        var legal = row.toString() + ',' + column.toString();
+        if ((row === x - 1 || row === x - 2) && color === 'white') {
+          if (column === y) {
+              possibleMoves.push(legal);
+          }
+        } else if ((row === x + 1 || row === x + 2) && color === 'black') {
+          if (column === y) {
+              possibleMoves.push(legal);
+          }
+        }
+      }
+    }
+    // var remove = possibleMoves.indexOf(location);
+    // possibleMoves.splice(remove, 1);
   }
 }
+
+var pawn = new MoveSets();
+pawn.pawn('1,1', 'black');
+
+var queen = new MoveSets();
+queen.queen('3,4');
 
 var knight = new MoveSets();
 knight.knight('2,4');
@@ -260,14 +314,41 @@ rook.rook('3,6');
 
 var board = document.getElementById('board-placement');
 board.addEventListener('click', function(theEvent) {
-  var coordinate = theEvent.target.getAttribute('id').split(',');
-  var row = coordinate[0];
-  var column = coordinate[1];
   if (myGame.state == 'selecting') {
+    var coordinate = theEvent.target.getAttribute('id').split(',');
+    var row = coordinate[0];
+    var column = coordinate[1];
+    var selectedPiece;
+    play.information();
     myGame.board.squares.forEach(function(square) {
       if (square.row == row && square.column == column) {
+        selectedPiece = square;
+        myGame.state = 'moving';
         console.log(square);
       }
     });
   }
+  board.addEventListener('click', function(nextEvent) {
+    if (myGame.state == 'moving') {
+      play.information();
+      var newCoordinate = nextEvent.target.getAttribute('id').split(',');
+      var newRow = newCoordinate[0];
+      var newColumn = newCoordinate[1];
+      myGame.board.squares.forEach(function(newSquare) {
+        if (newSquare.row == newRow && newSquare.column == newColumn) {
+          newSquare.piece.piece = selectedPiece.piece.piece;
+
+          var updateBoard = new Board();
+          var index = updateBoard.squares.indexOf(selectedPiece);
+          updateBoard.squares.splice(index, 1);
+          updateBoard.squares.push(newSquare);
+          updateBoard.boardHTML();
+          myGame.state = 'selecting';
+          myGame.nextTurn();
+          play.information();
+          console.log(newSquare);
+        }
+      })
+    }
+  })
 });
