@@ -242,8 +242,6 @@ var MoveSets = function() {
         }
       }
     }
-    var remove = possibleMoves.indexOf(location);
-    possibleMoves.splice(remove, 1);
     console.log(possibleMoves);
   }
 }
