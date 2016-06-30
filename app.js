@@ -117,6 +117,7 @@ var Game = function(players) {
   this.players = players;
   this.currentPlayer = {};
   this.currentPiece = {};
+  this.moveSet = {};
   this.state = '';
   var self = this;
   this.start = function() {
@@ -138,6 +139,54 @@ var Game = function(players) {
       }
     });
   }
+  this.move =
+  this.HTML = function() {
+    var status = document.createElement('div');
+    var playerName = document.createElement('div');
+    playerName.textContent = 'Player Name: ' + this.currentPlayer.name;
+    var playerColor = document.createElement('div');
+    playerColor.textContent = 'Player Color: ' + this.currentPlayer.color;
+    var state = document.createElement('div');
+    state.textContent = 'Player State: ' + this.state;
+    if (typeof this.currentPiece.piece != 'undefined') {
+      var piece = document.createElement('div');
+      piece.textContent = 'Current Piece: ' + this.currentPiece.piece.color + " " + this.currentPiece.piece.type;
+      status.appendChild(piece);
+    }
+    status.appendChild(playerName);
+    status.appendChild(playerColor);
+    status.appendChild(state)
+    return status;
+  }
+  document.body.addEventListener('click', function(theEvent) {
+    if (theEvent.target.getAttribute('data-unselect')) {
+      self.currentPiece = {};
+      self.state = 'selecting'
+    }
+  });
+  document.body.addEventListener('click', function(theEvent) {
+    if (myGame.state == 'selecting') {
+      var coordinate = theEvent.target.getAttribute('id').split(',');
+      var row = coordinate[0];
+      var column = coordinate[1];
+      myGame.board.squares.forEach(function(square) {
+        if (square.row == row && square.column == column) {
+          myGame.state = 'moving';
+          myGame.currentPiece = square.piece;
+          var moveSet = new MoveSets();
+          switch (square.piece.piece.type) {
+            case "pawn":
+              moveSet.pawn(square.piece.position[0] + "," + square.piece.position[1], square.piece.piece.color);
+              break;
+          }
+        }
+      });
+    }
+  });
+  document.body.addEventListener('click', function(theEvent) {
+    if (myGame.state == 'moving') {
+    }
+  });
 }
 var Player = function(name, color) {
   this.name = name;
@@ -147,7 +196,6 @@ var ron = new Player('Ron', 'white');
 var zach = new Player('Zach', 'black')
 var myGame = new Game([ron, zach]);
 myGame.start();
-
 //shows whose turn it is and what state the game is in
 var GameInformation = function() {
   this.information = function() {
@@ -160,7 +208,6 @@ var GameInformation = function() {
 }
 var play = new GameInformation();
 play.information();
-
 //add to moveSets
 var MoveSets = function() {
   this.king = function(location) {
@@ -168,7 +215,6 @@ var MoveSets = function() {
     var x = parseInt(coordinate[0]);
     var y = parseInt(coordinate[1]);
     var possibleMoves = [];
-
     for (var row = 0; row <= 7; row++) {
       for (var column = 0; column <= 7; column++) {
         if (row === x || row === x + 1 || row === x - 1) {
@@ -182,13 +228,11 @@ var MoveSets = function() {
     var remove = possibleMoves.indexOf(location);
     possibleMoves.splice(remove, 1);
   }
-
   this.rook = function(location) {
     var coordinate = location.split(',');
     var x = parseInt(coordinate[0]);
     var y = parseInt(coordinate[1]);
     var possibleMoves = [];
-
     for (var row = 0; row <= 7; row++) {
       for (var column = 0; column <= 7; column++) {
         var legal = row.toString() + ',' + column.toString();
@@ -202,13 +246,11 @@ var MoveSets = function() {
     var remove = possibleMoves.indexOf(location);
     possibleMoves.splice(remove, 1);
   }
-
   this.bishop = function(location) {
     var coordinate = location.split(',');
     var x = parseInt(coordinate[0]);
     var y = parseInt(coordinate[1]);
     var possibleMoves = [];
-
     for (var row = 0; row <= 7; row++) {
       for (var column = 0; column <= 7; column++) {
         var legal = row.toString() + ',' + column.toString();
@@ -222,13 +264,11 @@ var MoveSets = function() {
     var remove = possibleMoves.indexOf(location);
     possibleMoves.splice(remove, 1);
   }
-
   this.knight = function(location) {
     var coordinate = location.split(',');
     var x = parseInt(coordinate[0]);
     var y = parseInt(coordinate[1]);
     var possibleMoves = [];
-
     for (var row = 0; row <= 7; row++) {
       for (var column = 0; column <= 7; column++) {
         var legal = row.toString() + ',' + column.toString();
@@ -244,13 +284,11 @@ var MoveSets = function() {
       }
     }
   }
-
   this.queen = function(location) {
     var coordinate = location.split(',');
     var x = parseInt(coordinate[0]);
     var y = parseInt(coordinate[1]);
     var possibleMoves = [];
-
     for (var row = 0; row <= 7; row++) {
       for (var column = 0; column <= 7; column++) {
         var legal = row.toString() + ',' + column.toString();
@@ -268,13 +306,11 @@ var MoveSets = function() {
     var remove = possibleMoves.indexOf(location);
     possibleMoves.splice(remove, 1);
   }
-
   this.pawn = function(location, color) {
     var coordinate = location.split(',');
     var x = parseInt(coordinate[0]);
     var y = parseInt(coordinate[1]);
     var possibleMoves = [];
-
     for (var row = 0; row <= 7; row++) {
       for (var column = 0; column <= 7; column++) {
         var legal = row.toString() + ',' + column.toString();
@@ -289,66 +325,30 @@ var MoveSets = function() {
         }
       }
     }
-    // var remove = possibleMoves.indexOf(location);
-    // possibleMoves.splice(remove, 1);
+    return possibleMoves;
   }
 }
-
-var pawn = new MoveSets();
-pawn.pawn('1,1', 'black');
-
-var queen = new MoveSets();
-queen.queen('3,4');
-
-var knight = new MoveSets();
-knight.knight('2,4');
-
-var bishop = new MoveSets();
-bishop.bishop('3,3');
-
-var king = new MoveSets();
-king.king('4,4');
-
-var rook = new MoveSets();
-rook.rook('3,6');
-
-var board = document.getElementById('board-placement');
-board.addEventListener('click', function(theEvent) {
-  if (myGame.state == 'selecting') {
-    var coordinate = theEvent.target.getAttribute('id').split(',');
-    var row = coordinate[0];
-    var column = coordinate[1];
-    var selectedPiece;
-    play.information();
-    myGame.board.squares.forEach(function(square) {
-      if (square.row == row && square.column == column) {
-        selectedPiece = square;
-        myGame.state = 'moving';
-        console.log(square);
-      }
-    });
-  }
-  board.addEventListener('click', function(nextEvent) {
-    if (myGame.state == 'moving') {
-      play.information();
-      var newCoordinate = nextEvent.target.getAttribute('id').split(',');
-      var newRow = newCoordinate[0];
-      var newColumn = newCoordinate[1];
-      myGame.board.squares.forEach(function(newSquare) {
-        if (newSquare.row == newRow && newSquare.column == newColumn) {
-          newSquare.piece.piece = selectedPiece.piece.piece;
-
-          var updateBoard = new Board();
-          var index = updateBoard.squares.indexOf(selectedPiece);
-          updateBoard.squares.splice(index, 1);
-          updateBoard.squares.push(newSquare);
-          updateBoard.boardHTML();
-          myGame.state = 'selecting';
-          myGame.nextTurn();
-          play.information();
-          console.log(newSquare);
-        }
-      })
-    }
-  })
-});
+// var pawn = new MoveSets();
+// pawn.pawn('1,1', 'black');
+//
+// var queen = new MoveSets();
+// queen.queen('3,4');
+//
+// var knight = new MoveSets();
+// knight.knight('2,4');
+//
+// var bishop = new MoveSets();
+// bishop.bishop('3,3');
+//
+// var king = new MoveSets();
+// king.king('4,4');
+//
+// var rook = new MoveSets();
+// rook.rook('3,6');
+var showGame = function() {
+  var status = myGame.HTML();
+  var theStatus = document.getElementById('information');
+  theStatus.innerHTML = "";
+  theStatus.appendChild(status)
+}
+setInterval(showGame, 1000);
