@@ -213,18 +213,56 @@ var ron = new Player('Ron', 'white');
 var zach = new Player('Zach', 'black')
 var myGame = new Game([ron, zach]);
 myGame.start();
-//shows whose turn it is and what state the game is in
-var GameInformation = function() {
-  this.information = function() {
-    $('#information').empty();
-    var information = document.createElement('div');
-    information.classList.add('col-xs-2');
-    information.textContent = myGame.currentPlayer.color + ' is ' + myGame.state;
-    $('#information').append(information);
-  }
+
+//collision detection
+var Collision = function(possibleMoves, currentLocation) {
+  currentCoordinate = currentLocation.split(',');
+  var x1 = currentCoordinate[0];
+  var y1 = currentCoordinate[1];
+  var xIncrease = [];
+      xDecrease = [];
+      yIncrease = [];
+      yDecrease = [];
+      bothIncrease = [];
+      bothDecrease = [];
+      xIncreaseYDecrease = [];
+      xDecreaseYIncrease = [];
+
+  possibleMoves.forEach(function(move) {
+    var coordinate = move.split(',');
+    var x = parseInt(coordinate[0]);
+    var y = parseInt(coordinate[1]);
+    myGame.board.squares.forEach(square) {
+      if (square.piece.position[0] === x && square.piece.position[1] === y) {
+        var distance = Math.sqrt(((x1 - x)(x1 - x)) + ((y1 - y)(y1 - y)));
+        var findCourse = {'distance': distance, 'square': square};
+        if (x1 < x && y1 === y) {
+          xIncrease.push(findCourse);
+        } else if (x1 === x && y1 < y) {
+          yIncrease.push(findCourse);
+        } else if (x1 > x && y1 === y) {
+          xDecrease.push(findCoursee);
+        } else if (x1 === x && y1 > y) {
+          yDecrease.push(findCourse);
+        } else if (x1 < x && y1 < y) {
+          bothIncrease.push(findCourse);
+        } else if (x1 > x && y1 > y) {
+          bothDecrease.push(findCourse);
+        } else if (x1 < x && y1 > y) {
+          xIncreaseYDecrease.push(findCourse);
+        } else if (x1 > x && y1 < y) {
+          xDecreaseYIncrease.push(findCourse);
+        }
+      }
+    }
+  })
 }
-var play = new GameInformation();
-play.information();
+
+//get smallest number out of an array
+function getSmallest(array) {
+
+}
+
 //add to moveSets
 var MoveSets = function() {
   this.king = function(location) {
@@ -350,23 +388,7 @@ var MoveSets = function() {
     return possibleMoves;
   }
 }
-// var pawn = new MoveSets();
-// pawn.pawn('1,1', 'black');
-//
-// var queen = new MoveSets();
-// queen.queen('3,4');
-//
-// var knight = new MoveSets();
-// knight.knight('2,4');
-//
-// var bishop = new MoveSets();
-// bishop.bishop('3,3');
-//
-// var king = new MoveSets();
-// king.king('4,4');
-//
-// var rook = new MoveSets();
-// rook.rook('3,6');
+
 var showGame = function() {
   var status = myGame.HTML();
   var theStatus = document.getElementById('information');
