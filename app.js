@@ -215,10 +215,11 @@ var myGame = new Game([ron, zach]);
 myGame.start();
 
 //collision detection
-var Collision = function(possibleMoves, currentLocation) {
+function collision(possibleMoves, currentLocation) {
   currentCoordinate = currentLocation.split(',');
   var x1 = currentCoordinate[0];
   var y1 = currentCoordinate[1];
+  var actualMoves = []; //populate with coordinates after getSmallest fx is run
   var xIncrease = [];
       xDecrease = [];
       yIncrease = [];
@@ -232,7 +233,7 @@ var Collision = function(possibleMoves, currentLocation) {
     var coordinate = move.split(',');
     var x = parseInt(coordinate[0]);
     var y = parseInt(coordinate[1]);
-    myGame.board.squares.forEach(square) {
+    myGame.board.squares.forEach(function(square) {
       if (square.piece.position[0] === x && square.piece.position[1] === y) {
         var distance = Math.sqrt(((x1 - x)(x1 - x)) + ((y1 - y)(y1 - y)));
         var findCourse = {'distance': distance, 'square': square};
