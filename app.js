@@ -215,7 +215,7 @@ var myGame = new Game([ron, zach]);
 myGame.start();
 
 //collision detection
-function collision(possibleMoves, currentLocation) {
+function collision(possibleMoves, currentLocation, color) {
   currentCoordinate = currentLocation.split(',');
   var x1 = currentCoordinate[0];
   var y1 = currentCoordinate[1];
@@ -244,72 +244,126 @@ function collision(possibleMoves, currentLocation) {
     myGame.board.squares.forEach(function(square) {
       if (square.piece.position[0] === x && square.piece.position[1] === y) {
         var distance = Math.sqrt(((x1 - x)(x1 - x)) + ((y1 - y)(y1 - y)));
+        var testDistance = {};
         if (x1 < x && y1 === y) {
-          xIncrease.push(square);
-          xIncreaseDistance.push(distance);
+          testDistance.distance = distance;
+          testDistance.square = square;
+          xIncrease.push(testDistance);
+          // xIncreaseDistance.push(distance);
         } else if (x1 === x && y1 < y) {
-          yIncrease.push(square);
-          yIncreaseDistance.push(distance);
+          testDistance.distance = distance;
+          testDistance.square = square;
+          yIncrease.push(testDistance);
+          // yIncreaseDistance.push(distance);
         } else if (x1 > x && y1 === y) {
-          xDecrease.push(square);
-          xDecreaseDistance.push(distance);
+          testDistance.distance = distance;
+          testDistance.square = square;
+          xDecrease.push(testDistance);
+          // xDecreaseDistance.push(distance);
         } else if (x1 === x && y1 > y) {
-          yDecrease.push(square);
-          yDecreaseDistance.push(distance);
+          testDistance.distance = distance;
+          testDistance.square = square;
+          yDecrease.push(testDistance);
+          // yDecreaseDistance.push(distance);
         } else if (x1 < x && y1 < y) {
-          bothIncrease.push(square);
-          bothIncreaseDistance.push(distance);
+          testDistance.distance = distance;
+          testDistance.square = square;
+          bothIncrease.push(testDistance);
+          // bothIncreaseDistance.push(distance);
         } else if (x1 > x && y1 > y) {
-          bothDecrease.push(square);
-          bothDecreaseDistance.push(distance);
+          testDistance.distance = distance;
+          testDistance.square = square;
+          bothDecrease.push(testDistance);
+          // bothDecreaseDistance.push(distance);
         } else if (x1 < x && y1 > y) {
-          xIncreaseYDecrease.push(square);
-          xIncreaseYDecreaseDistance.push(distance);
+          testDistance.distance = distance;
+          testDistance.square = square;
+          xIncreaseYDecrease.push(testDistance);
+          // xIncreaseYDecreaseDistance.push(distance);
         } else if (x1 > x && y1 < y) {
-          xDecreaseYIncrease.push(square);
-          xDecreaseYIncrease.push(distance);
+          testDistance.distance = distance;
+          testDistance.square = square;
+          xDecreaseYIncrease.push(testDistance);
+          // xDecreaseYIncreaseDistance.push(distance);
         }
       }
     });
   });
 
-  //NEEDS MORE WORK: remove all numbers besides smallest number...
-  //get smallest numbers and use them to find index of the closest square
-  //in a given direction
-  var checkXIncrease = getSmallest(xIncreaseDistance);
-  actualMoves.push(xIncrease[checkXIncrease]);
-  var checkXDecrease = getSmallest(xDecreaseDistance);
-  actualMoves.push(xDecrease[checkXDecrease]);
-  var checkYIncrease = getSmallest(yIncreaseDistance);
-  actualMoves.push(yIncrease[checkYIncrease]);
-  var checkYDecrease = getSmallest(yDecreaseDistance);
-  actualMoves.push()
-  var checkBothIncrease = getSmallest(bothIncreaseDistance);
-  var checkBothDecrease = getSmallest(bothDecreaseDistance);
-  var checkXIncreaseYDecrease = getSmallest(xIncreaseYDecreaseDistance);
-  var checkXDecreaseYIncrease = getSmallest(xDecreaseYIncreaseDistance);
+  //Takes array of objects with squares in them and orders them by distance
+  //from shortest distance to location to largest distance
+  var checkXIncrease = pathEnd(xIncrease);
+  var checkXDecrease = pathEnd(xDecrease);
+  var checkYIncrease = pathEnd(yIncrease);
+  var checkYDecrease = pathEnd(yDecrease);
+  var checkBothIncrease = pathEnd(bothIncrease);
+  var checkBothDecrease = pathEnd(bothDecrease);
+  var checkXIncreaseYDecrease = pathEnd(xIncreaseYDecrease);
+  var checkXDecreaseYIncrease = pathEnd(xDecreaseYIncrease);
+
+  actualMoves.push(pathEnd(checkXIncrease));
+  actualMoves.push(pathEnd(checkXDecrease));
+  actualMoves.push(pathEnd(checkYIncrease));
+  actualMoves.push(pathEnd(checkYDecrease));
+  actualMoves.push(pathEnd(checkBothIncrease));
+  actualMoves.push(pathEnd(checkBothDecrease));
+  actualMoves.push(pathEnd(checkXIncreaseYDecrease));
+  actualMoves.push(pathEnd(checkXDecreaseYIncrease));
+
+  return actualMoves;
 }
+
+function getMoves(array, color) {
+  var legalMoves = [];
+  array.square.forEach(function(square) {
+    if (square.piece.piece == undefined) {
+      legalMoves.push(square);
+    } else {
+      if (square.piece.piece.color == color) {
+        return false;
+      } else {
+        legalMoves.push(square);
+        return true;
+      }
+    }
+  });
+  return legalMoves;
+}
+
+function pathEnd(array) {
+  array.sort(function(a, b) {
+    if (a.distance > b.distance) {
+      return 1;
+    } else if (a.distance < b.distance) {
+      return -1;
+    }
+  })
+  return array;
+}
+// // test getSmallest
+// var test = [
+//   {distance: 7},
+//   {distance: 12},
+//   {distance: 5}
+// ];
+// var output = pathEnd(test);
+// console.log(output);
 
 //get smallest number out of an array
 //check if smallest distance has a piece on it, if not remove
 //from array and add to actualMoves
 //if so, check pieces color and whether it is legal or not to land on
 //remove other pieces
-function getSmallest(array) {
-  Array.min = function(array) {
-    return Math.min.apply(Math, array);
-  }
-  var smallest = Array.min(array);
-  var indexDistance = array.indexOf(smallest);
-  return indexDistance;
-}
+// function getSmallest(array) {
+//   Array.min = function(array) {
+//     return Math.min.apply(Math, array);
+//   }
+//   var smallest = Array.min(array);
+//   var indexDistance = array.indexOf(smallest);
+//   return indexDistance;
+// }
 
-//test getSmallest
-// var test = [
-//   1, 9, 94, 12
-// ]
-// var output = getSmallest(test);
-// console.log(output);
+
 
 //add to moveSets
 var MoveSets = function() {
