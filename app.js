@@ -272,16 +272,44 @@ function collision(possibleMoves, currentLocation) {
       }
     });
   });
+
+  //NEEDS MORE WORK: remove all numbers besides smallest number...
+  //get smallest numbers and use them to find index of the closest square
+  //in a given direction
+  var checkXIncrease = getSmallest(xIncreaseDistance);
+  actualMoves.push(xIncrease[checkXIncrease]);
+  var checkXDecrease = getSmallest(xDecreaseDistance);
+  actualMoves.push(xDecrease[checkXDecrease]);
+  var checkYIncrease = getSmallest(yIncreaseDistance);
+  actualMoves.push(yIncrease[checkYIncrease]);
+  var checkYDecrease = getSmallest(yDecreaseDistance);
+  actualMoves.push()
+  var checkBothIncrease = getSmallest(bothIncreaseDistance);
+  var checkBothDecrease = getSmallest(bothDecreaseDistance);
+  var checkXIncreaseYDecrease = getSmallest(xIncreaseYDecreaseDistance);
+  var checkXDecreaseYIncrease = getSmallest(xDecreaseYIncreaseDistance);
 }
 
 //get smallest number out of an array
+//check if smallest distance has a piece on it, if not remove
+//from array and add to actualMoves
+//if so, check pieces color and whether it is legal or not to land on
+//remove other pieces
 function getSmallest(array) {
   Array.min = function(array) {
     return Math.min.apply(Math, array);
   }
   var smallest = Array.min(array);
-  return smallest;
+  var indexDistance = array.indexOf(smallest);
+  return indexDistance;
 }
+
+//test getSmallest
+// var test = [
+//   1, 9, 94, 12
+// ]
+// var output = getSmallest(test);
+// console.log(output);
 
 //add to moveSets
 var MoveSets = function() {
