@@ -214,11 +214,19 @@ var zach = new Player('Zach', 'black')
 var myGame = new Game([ron, zach]);
 myGame.start();
 
+//collision testing
+var spots = ["0,3", "1,3", "2,3", "3,3", "3,7", "4,0", "4,3", "4,6", "5,1", "5,3", "5,5", "6,2", "6,3", "6,4", "7,0", "7,1", "7,2", "7,4", "7,5", "7,6", "7,7"];
+var current = '7,3';
+var color = 'black';
+
+
+// console.log(collision(spots, current, color));
+collision(spots, current, color)
 //collision detection
 function collision(possibleMoves, currentLocation, color) {
   currentCoordinate = currentLocation.split(',');
-  var x1 = currentCoordinate[0];
-  var y1 = currentCoordinate[1];
+  var x1 = parseInt(currentCoordinate[0]);
+  var y1 = parseInt(currentCoordinate[1]);
   var actualMoves = []; //populate with coordinates after getSmallest fx is run
   var xIncrease = [];
       xDecrease = [];
@@ -228,24 +236,24 @@ function collision(possibleMoves, currentLocation, color) {
       bothDecrease = [];
       xIncreaseYDecrease = [];
       xDecreaseYIncrease = [];
-      xIncreaseDistance = [];
-      xDecreaseDistance = [];
-      yIncreaseDistance = [];
-      yDecreaseDistance = [];
-      bothIncreaseDistance = [];
-      bothDecreaseDistance = [];
-      xIncreaseYDecreaseDistance = [];
-      xDecreaseYIncreaseDistance = [];
+      // xIncreaseDistance = [];
+      // xDecreaseDistance = [];
+      // yIncreaseDistance = [];
+      // yDecreaseDistance = [];
+      // bothIncreaseDistance = [];
+      // bothDecreaseDistance = [];
+      // xIncreaseYDecreaseDistance = [];
+      // xDecreaseYIncreaseDistance = [];
 
   possibleMoves.forEach(function(move) {
     var coordinate = move.split(',');
     var x = parseInt(coordinate[0]);
     var y = parseInt(coordinate[1]);
     myGame.board.squares.forEach(function(square) {
-      if (square.piece.position[0] === x && square.piece.position[1] === y) {
-        var distance = Math.sqrt(((x1 - x)(x1 - x)) + ((y1 - y)(y1 - y)));
+      if (square.row === x && square.column === y) {
+        var distance = Math.sqrt(((x1 - x)*(x1 - x)) + ((y1 - y)*(y1 - y)));
         var testDistance = {};
-        if (x1 < x && y1 === y) {
+        if ((x1 < x) && (y1 === y)) {
           testDistance.distance = distance;
           testDistance.square = square;
           xIncrease.push(testDistance);
@@ -290,6 +298,7 @@ function collision(possibleMoves, currentLocation, color) {
     });
   });
 
+
   //Takes array of objects with squares in them and orders them by distance
   //from shortest distance to location to largest distance
   var checkXIncrease = pathEnd(xIncrease);
@@ -301,32 +310,34 @@ function collision(possibleMoves, currentLocation, color) {
   var checkXIncreaseYDecrease = pathEnd(xIncreaseYDecrease);
   var checkXDecreaseYIncrease = pathEnd(xDecreaseYIncrease);
 
-  actualMoves.push(pathEnd(checkXIncrease));
-  actualMoves.push(pathEnd(checkXDecrease));
-  actualMoves.push(pathEnd(checkYIncrease));
-  actualMoves.push(pathEnd(checkYDecrease));
-  actualMoves.push(pathEnd(checkBothIncrease));
-  actualMoves.push(pathEnd(checkBothDecrease));
-  actualMoves.push(pathEnd(checkXIncreaseYDecrease));
-  actualMoves.push(pathEnd(checkXDecreaseYIncrease));
+  actualMoves.push(getMoves(checkXIncrease, color));
+  actualMoves.push(getMoves(checkXDecrease, color));
+  actualMoves.push(getMoves(checkYIncrease, color));
+  actualMoves.push(getMoves(checkYDecrease, color));
+  actualMoves.push(getMoves(checkBothIncrease, color));
+  actualMoves.push(getMoves(checkBothDecrease, color));
+  actualMoves.push(getMoves(checkXIncreaseYDecrease, color));
+  actualMoves.push(getMoves(checkXDecreaseYIncrease, color));
 
   return actualMoves;
 }
 
 function getMoves(array, color) {
   var legalMoves = [];
-  array.square.forEach(function(square) {
-    if (square.piece.piece == undefined) {
-      legalMoves.push(square);
+
+  for (var i = 0; i < array.length; i++) {
+    if (array[i].square.piece.piece !== undefined) {
+      legalMoves.push(array[i]);
     } else {
-      if (square.piece.piece.color == color) {
+      if (array[i].square.piece.color === color) {
         return false;
       } else {
-        legalMoves.push(square);
-        return true;
+        legalMoves.push(array[i]);
+        return false;
       }
     }
-  });
+  }
+  console.log(legalMoves);
   return legalMoves;
 }
 
@@ -337,7 +348,7 @@ function pathEnd(array) {
     } else if (a.distance < b.distance) {
       return -1;
     }
-  })
+  });
   return array;
 }
 // // test getSmallest
