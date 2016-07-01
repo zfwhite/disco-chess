@@ -228,6 +228,14 @@ function collision(possibleMoves, currentLocation) {
       bothDecrease = [];
       xIncreaseYDecrease = [];
       xDecreaseYIncrease = [];
+      xIncreaseDistance = [];
+      xDecreaseDistance = [];
+      yIncreaseDistance = [];
+      yDecreaseDistance = [];
+      bothIncreaseDistance = [];
+      bothDecreaseDistance = [];
+      xIncreaseYDecreaseDistance = [];
+      xDecreaseYIncreaseDistance = [];
 
   possibleMoves.forEach(function(move) {
     var coordinate = move.split(',');
@@ -236,32 +244,43 @@ function collision(possibleMoves, currentLocation) {
     myGame.board.squares.forEach(function(square) {
       if (square.piece.position[0] === x && square.piece.position[1] === y) {
         var distance = Math.sqrt(((x1 - x)(x1 - x)) + ((y1 - y)(y1 - y)));
-        var findCourse = {'distance': distance, 'square': square};
         if (x1 < x && y1 === y) {
-          xIncrease.push(findCourse);
+          xIncrease.push(square);
+          xIncreaseDistance.push(distance);
         } else if (x1 === x && y1 < y) {
-          yIncrease.push(findCourse);
+          yIncrease.push(square);
+          yIncreaseDistance.push(distance);
         } else if (x1 > x && y1 === y) {
-          xDecrease.push(findCoursee);
+          xDecrease.push(square);
+          xDecreaseDistance.push(distance);
         } else if (x1 === x && y1 > y) {
-          yDecrease.push(findCourse);
+          yDecrease.push(square);
+          yDecreaseDistance.push(distance);
         } else if (x1 < x && y1 < y) {
-          bothIncrease.push(findCourse);
+          bothIncrease.push(square);
+          bothIncreaseDistance.push(distance);
         } else if (x1 > x && y1 > y) {
-          bothDecrease.push(findCourse);
+          bothDecrease.push(square);
+          bothDecreaseDistance.push(distance);
         } else if (x1 < x && y1 > y) {
-          xIncreaseYDecrease.push(findCourse);
+          xIncreaseYDecrease.push(square);
+          xIncreaseYDecreaseDistance.push(distance);
         } else if (x1 > x && y1 < y) {
-          xDecreaseYIncrease.push(findCourse);
+          xDecreaseYIncrease.push(square);
+          xDecreaseYIncrease.push(distance);
         }
       }
-    }
-  })
+    });
+  });
 }
 
 //get smallest number out of an array
 function getSmallest(array) {
-
+  Array.min = function(array) {
+    return Math.min.apply(Math, array);
+  }
+  var smallest = Array.min(array);
+  return smallest;
 }
 
 //add to moveSets
@@ -367,6 +386,8 @@ var MoveSets = function() {
     possibleMoves.splice(remove, 1);
     return possibleMoves;
   }
+
+  //will have to be updated
   this.pawn = function(location, color) {
     var coordinate = location.split(',');
     var x = parseInt(coordinate[0]);
