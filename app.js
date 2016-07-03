@@ -220,8 +220,8 @@ var current = '7,3';
 var color = 'black';
 
 
-// console.log(collision(spots, current, color));
-collision(spots, current, color)
+console.log(collision(spots, current, color));
+// collision(spots, current, color)
 //collision detection
 function collision(possibleMoves, currentLocation, color) {
   currentCoordinate = currentLocation.split(',');
@@ -321,23 +321,25 @@ function collision(possibleMoves, currentLocation, color) {
 
   return actualMoves;
 }
-
+//function to check whether or not a space has an existing piece in it
+//check color of piece in order to decide whether or not piece should be
+//returned in array
 function getMoves(array, color) {
   var legalMoves = [];
 
   for (var i = 0; i < array.length; i++) {
+    // console.log(array[i].square);
     if (array[i].square.piece.piece !== undefined) {
-      legalMoves.push(array[i]);
-    } else {
-      if (array[i].square.piece.color === color) {
-        return false;
+      if(array[i].square.piece.piece.color === color) {
+        return legalMoves;
       } else {
-        legalMoves.push(array[i]);
-        return false;
+        legalMoves.push(array[i].square);
+        return legalMoves;
       }
+    } else {
+      legalMoves.push(array[i].square);
     }
   }
-  console.log(legalMoves);
   return legalMoves;
 }
 
