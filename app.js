@@ -177,22 +177,40 @@ var Game = function(players) {
             var moveSet = new MoveSets();
             switch (square.piece.piece.type) {
               case "pawn":
-                console.log(moveSet.pawn(square.piece.position[0] + "," + square.piece.position[1], square.piece.piece.color));
+                var color = square.piece.piece.color;
+                var location = square.piece.position[0] + "," + square.piece.position[1];
+                var moves = moveSet.pawn(location, color);
+                console.log(collision(moves, location, color));
                 break;
               case "rook":
-                console.log(moveSet.rook(square.piece.position[0] + "," + square.piece.position[1]));
+                var color = square.piece.piece.color;
+                var location = square.piece.position[0] + "," + square.piece.position[1];
+                var moves = moveSet.rook(location);
+                console.log(collision(moves, location, color));
                 break;
               case "knight":
-                console.log(moveSet.knight(square.piece.position[0] + "," + square.piece.position[1]));
+                var color = square.piece.piece.color;
+                var location = square.piece.position[0] + "," + square.piece.position[1];
+                var moves = moveSet.knight(location);
+                console.log(knightCollision(moves, color));
                 break;
               case "bishop":
-                console.log(moveSet.bishop(square.piece.position[0] + "," + square.piece.position[1]));
+                var color = square.piece.piece.color;
+                var location = square.piece.position[0] + "," + square.piece.position[1];
+                var moves = moveSet.bishop(location);
+                console.log(collision(moves, location, color));
                 break;
               case "queen":
-                console.log(moveSet.queen(square.piece.position[0] + "," + square.piece.position[1]));
+                var color = square.piece.piece.color;
+                var location = square.piece.position[0] + "," + square.piece.position[1];
+                var moves = moveSet.queen(location);
+                console.log(collision(moves, location, color));
                 break;
               case "king":
-                console.log(moveSet.king(square.piece.position[0] + "," + square.piece.position[1]));
+                var color = square.piece.piece.color;
+                var location = square.piece.position[0] + "," + square.piece.position[1];
+                var moves = moveSet.king(location);
+                console.log(collision(moves, location, color));
                 break;
             }
           }
@@ -219,8 +237,28 @@ var spots = ["0,3", "1,3", "2,3", "3,3", "3,7", "4,0", "4,3", "4,6", "5,1", "5,3
 var current = '7,3';
 var color = 'black';
 
+function knightCollision(possibleMoves, color) {
 
-console.log(collision(spots, current, color));
+  var legalMoves = [];
+
+  myGame.board.squares.forEach(function(square) {
+    possibleMoves.forEach(function(move) {
+      var coordinate = move.split(',');
+      var x = parseInt(coordinate[0]);
+      var y = parseInt(coordinate[1]);
+      if (square.row === x && square.column === y) {
+        if (square.piece.piece === undefined) {
+          legalMoves.push(square);
+        } else if (square.piece.piece.color !== color) {
+          legalMoves.push(square);
+        }
+      }
+    });
+  })
+  return legalMoves;
+}
+
+// console.log(collision(spots, current, color));
 // collision(spots, current, color)
 //collision detection
 function collision(possibleMoves, currentLocation, color) {
@@ -236,14 +274,6 @@ function collision(possibleMoves, currentLocation, color) {
       bothDecrease = [];
       xIncreaseYDecrease = [];
       xDecreaseYIncrease = [];
-      // xIncreaseDistance = [];
-      // xDecreaseDistance = [];
-      // yIncreaseDistance = [];
-      // yDecreaseDistance = [];
-      // bothIncreaseDistance = [];
-      // bothDecreaseDistance = [];
-      // xIncreaseYDecreaseDistance = [];
-      // xDecreaseYIncreaseDistance = [];
 
   possibleMoves.forEach(function(move) {
     var coordinate = move.split(',');
@@ -257,42 +287,34 @@ function collision(possibleMoves, currentLocation, color) {
           testDistance.distance = distance;
           testDistance.square = square;
           xIncrease.push(testDistance);
-          // xIncreaseDistance.push(distance);
         } else if (x1 === x && y1 < y) {
           testDistance.distance = distance;
           testDistance.square = square;
           yIncrease.push(testDistance);
-          // yIncreaseDistance.push(distance);
         } else if (x1 > x && y1 === y) {
           testDistance.distance = distance;
           testDistance.square = square;
           xDecrease.push(testDistance);
-          // xDecreaseDistance.push(distance);
         } else if (x1 === x && y1 > y) {
           testDistance.distance = distance;
           testDistance.square = square;
           yDecrease.push(testDistance);
-          // yDecreaseDistance.push(distance);
         } else if (x1 < x && y1 < y) {
           testDistance.distance = distance;
           testDistance.square = square;
           bothIncrease.push(testDistance);
-          // bothIncreaseDistance.push(distance);
         } else if (x1 > x && y1 > y) {
           testDistance.distance = distance;
           testDistance.square = square;
           bothDecrease.push(testDistance);
-          // bothDecreaseDistance.push(distance);
         } else if (x1 < x && y1 > y) {
           testDistance.distance = distance;
           testDistance.square = square;
           xIncreaseYDecrease.push(testDistance);
-          // xIncreaseYDecreaseDistance.push(distance);
         } else if (x1 > x && y1 < y) {
           testDistance.distance = distance;
           testDistance.square = square;
           xDecreaseYIncrease.push(testDistance);
-          // xDecreaseYIncreaseDistance.push(distance);
         }
       }
     });
@@ -353,14 +375,6 @@ function pathEnd(array) {
   });
   return array;
 }
-// // test getSmallest
-// var test = [
-//   {distance: 7},
-//   {distance: 12},
-//   {distance: 5}
-// ];
-// var output = pathEnd(test);
-// console.log(output);
 
 //get smallest number out of an array
 //check if smallest distance has a piece on it, if not remove
@@ -375,8 +389,6 @@ function pathEnd(array) {
 //   var indexDistance = array.indexOf(smallest);
 //   return indexDistance;
 // }
-
-
 
 //add to moveSets
 var MoveSets = function() {
