@@ -191,60 +191,58 @@ var Game = function(players) {
       var column = coordinate[1];
       myGame.board.squares.forEach(function(square) {
         if (square.row == row && square.column == column) {
+          console.log(square);
           if (square.piece.piece != undefined) {
             myGame.state = 'moving';
             myGame.currentPiece = square.piece.piece;
             var moveSet = new MoveSets();
             var color = square.piece.piece.color;
-            var location = square.piece.position[0] + "," + square.piece.position[1];
+            var location = square.row + "," + square.column;
+            console.log(location);
             switch (square.piece.piece.type) {
               case "pawn":
                 var moves = moveSet.pawn(location, color);
                 self.moveSet = collision(moves, location, color);
-                console.log(self.moveSet);
                 break;
               case "rook":
                 var moves = moveSet.rook(location);
                 self.moveSet = collision(moves, location, color);
-                console.log(self.moveSet);
                 break;
               case "knight":
                 var moves = moveSet.knight(location);
                 self.moveSet = knightCollision(moves, color);
-                console.log(self.moveSet);
                 break;
               case "bishop":
                 var moves = moveSet.bishop(location);
                 self.moveSet = collision(moves, location, color);
-                console.log(self.moveSet);
                 break;
               case "queen":
                 var moves = moveSet.queen(location);
                 self.moveSet = collision(moves, location, color);
-                console.log(self.moveSet);
                 break;
               case "king":
                 var moves = moveSet.king(location);
                 self.moveSet = collision(moves, location, color);
-                console.log(self.moveSet);
                 break;
             }
           }
         }
       });
     } else if (myGame.state == 'moving') {
-      var coordinate = theEvent.target.getAttribute('id').split(',');
-      var row = coordinate[0];
-      var column = coordinate[1];
+      var coordinateMove = theEvent.target.getAttribute('id').split(',');
+      var rowMove = coordinateMove[0];
+      var columnMove = coordinateMove[1];
       myGame.board.squares.forEach(function(square) {
-        if (square.row == row && square.column == column) {
+        if (square.row == rowMove && square.column == columnMove) {
           self.moveSet.forEach(function(move) {
             move.forEach(function(legal) {
-              if (legal.column == column && legal.row == row) {
+              if (legal.column == columnMove && legal.row == rowMove) {
                 square.piece.piece = myGame.currentPiece;
                 $('#board-placement').empty();
                 myGame.board.boardHTML();
                 myGame.nextTurn();
+                console.log(coordinate);
+                console.log(coordinateMove);
               }
             })
           })
