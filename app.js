@@ -119,6 +119,7 @@ var Game = function(players) {
   this.currentPiece = {};
   this.moveSet = {};
   this.state = '';
+  this.lastLocation = '';
   var self = this;
   this.start = function() {
     // Draw the board.
@@ -192,13 +193,13 @@ var Game = function(players) {
       myGame.board.squares.forEach(function(square) {
         if (square.row == row && square.column == column) {
           console.log(square);
-          if (square.piece.piece != undefined) {
+          if (square.piece.piece != undefined && square.piece.piece.color === self.currentPlayer.color) {
             myGame.state = 'moving';
             myGame.currentPiece = square.piece.piece;
             var moveSet = new MoveSets();
             var color = square.piece.piece.color;
             var location = square.row + "," + square.column;
-            console.log(location);
+            self.lastLocation = location;
             switch (square.piece.piece.type) {
               case "pawn":
                 var moves = moveSet.pawn(location, color);
@@ -232,16 +233,24 @@ var Game = function(players) {
       var coordinateMove = theEvent.target.getAttribute('id').split(',');
       var rowMove = coordinateMove[0];
       var columnMove = coordinateMove[1];
+      var remove = self.lastLocation.split(',');
+      var rowRemove = remove[0];
+      var columnRemove = remove[1];
       myGame.board.squares.forEach(function(square) {
         if (square.row == rowMove && square.column == columnMove) {
           self.moveSet.forEach(function(move) {
             move.forEach(function(legal) {
               if (legal.column == columnMove && legal.row == rowMove) {
                 square.piece.piece = myGame.currentPiece;
+                myGame.board.squares.forEach(function(square) {
+                  if (square.row == rowRemove && square.column == columnRemove) {
+                    square.piece = {};
+                  }
+                });
                 $('#board-placement').empty();
                 myGame.board.boardHTML();
                 myGame.nextTurn();
-                console.log(coordinate);
+                console.log(self.lastLocation);
                 console.log(coordinateMove);
               }
             })
