@@ -143,19 +143,33 @@ var Game = function(players) {
   //   }
   // });
 
-  this.nextTurn = function() {
-    if (self.currentPlayer == players[0]) {
-      self.currentPlayer = players[1];
-      self.state = 'selecting';
-      self.currentPiece = {};
-      self.moveSet = {};
-    } else {
-      self.currentPlayer = players[0];
-      self.state = 'selecting';
-      self.currentPiece = {};
-      self.moveSet = {};
-    }
-  }
+  // this.inCheck = function() {
+  //    // Where is the king?
+  //    // Run all possible moves for all opponents pieces, checking for king location.
+  //    myGame.board.squares.forEach(function(square) {
+  //      checkMoves(square.piece.piece.type);
+  //    })
+  //    if ('king is in check') {
+  //      self.check = true;
+  //    }
+  //  }
+
+   this.nextTurn = function() {
+     if (self.currentPlayer == players[0]) {
+       self.currentPlayer = players[1];
+       self.state = 'selecting';
+       self.currentPiece = {};
+       self.moveSet = {};
+     } else {
+       self.currentPlayer = players[0];
+       self.state = 'selecting';
+       self.currentPiece = {};
+       self.moveSet = {};
+     }
+
+    //  self.inCheck();
+   }
+
   this.move = function(location, moves) {
 
   }
@@ -195,36 +209,7 @@ var Game = function(players) {
           if (square.piece.piece != undefined && square.piece.piece.color === self.currentPlayer.color) {
             myGame.state = 'moving';
             myGame.currentPiece = square.piece.piece;
-            var moveSet = new MoveSets();
-            var color = square.piece.piece.color;
-            var location = square.row + "," + square.column;
-            self.lastLocation = location;
-            switch (square.piece.piece.type) {
-              case "pawn":
-                var moves = moveSet.pawn(location, color);
-                self.moveSet = pawnCollision(moves, location, color);
-                break;
-              case "rook":
-                var moves = moveSet.rook(location);
-                self.moveSet = collision(moves, location, color);
-                break;
-              case "knight":
-                var moves = moveSet.knight(location);
-                self.moveSet = knightCollision(moves, color);
-                break;
-              case "bishop":
-                var moves = moveSet.bishop(location);
-                self.moveSet = collision(moves, location, color);
-                break;
-              case "queen":
-                var moves = moveSet.queen(location);
-                self.moveSet = collision(moves, location, color);
-                break;
-              case "king":
-                var moves = moveSet.king(location);
-                self.moveSet = collision(moves, location, color);
-                break;
-            }
+            checkMoves(square);
           }
         }
       });
@@ -265,6 +250,39 @@ var ron = new Player('Ron', 'white');
 var zach = new Player('Zach', 'black');
 var myGame = new Game([ron, zach]);
 myGame.start();
+
+function checkMoves(square) {
+  var moveSet = new MoveSets();
+  var color = square.piece.piece.color;
+  var location = square.row + "," + square.column;
+  myGame.lastLocation = location;
+  switch (square.piece.piece.type) {
+    case "pawn":
+      var moves = moveSet.pawn(location, color);
+      myGame.moveSet = pawnCollision(moves, location, color);
+      break;
+    case "rook":
+      var moves = moveSet.rook(location);
+      myGame.moveSet = collision(moves, location, color);
+      break;
+    case "knight":
+      var moves = moveSet.knight(location);
+      myGame.moveSet = knightCollision(moves, color);
+      break;
+    case "bishop":
+      var moves = moveSet.bishop(location);
+      myGame.moveSet = collision(moves, location, color);
+      break;
+    case "queen":
+      var moves = moveSet.queen(location);
+      myGame.moveSet = collision(moves, location, color);
+      break;
+    case "king":
+      var moves = moveSet.king(location);
+      myGame.moveSet = collision(moves, location, color);
+      break;
+  }
+}
 
 function pawnCollision(possibleMoves, currentLocation, color) {
   var originalCoordinates = currentLocation.split(',');
@@ -375,7 +393,6 @@ function collision(possibleMoves, currentLocation, color) {
     });
   });
 
-
   //Takes array of objects with squares in them and orders them by distance
   //from shortest distance to location to largest distance.
   var checkXIncrease = pathEnd(xIncrease);
@@ -418,7 +435,7 @@ function getMoves(array, color) {
   }
   return legalMoves;
 }
-
+// Orders the moves in the array from smallest to largest.
 function pathEnd(array) {
   array.sort(function(a, b) {
     if (a.distance > b.distance) {
@@ -548,12 +565,7 @@ var MoveSets = function() {
     return possibleMoves;
   }
 
-  //Will have to be updated.
   this.pawn = function(location, color) {
-    // console.log(typeof location);
-    // if (location == '6,1') {
-    //   console.log('a');
-    // }
     var coordinate = location.split(',');
     var x = parseInt(coordinate[0]);
     var y = parseInt(coordinate[1]);
