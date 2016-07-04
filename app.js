@@ -192,7 +192,6 @@ var Game = function(players) {
       var column = coordinate[1];
       myGame.board.squares.forEach(function(square) {
         if (square.row == row && square.column == column) {
-          console.log(square);
           if (square.piece.piece != undefined && square.piece.piece.color === self.currentPlayer.color) {
             myGame.state = 'moving';
             myGame.currentPiece = square.piece.piece;
@@ -203,7 +202,7 @@ var Game = function(players) {
             switch (square.piece.piece.type) {
               case "pawn":
                 var moves = moveSet.pawn(location, color);
-                self.moveSet = collision(moves, location, color);
+                self.moveSet = pawnCollision(moves, location, color);
                 break;
               case "rook":
                 var moves = moveSet.rook(location);
@@ -250,8 +249,6 @@ var Game = function(players) {
                 $('#board-placement').empty();
                 myGame.board.boardHTML();
                 myGame.nextTurn();
-                console.log(self.lastLocation);
-                console.log(coordinateMove);
               }
             })
           })
@@ -268,6 +265,34 @@ var ron = new Player('Ron', 'white');
 var zach = new Player('Zach', 'black')
 var myGame = new Game([ron, zach]);
 myGame.start();
+
+function pawnCollision(possibleMoves, currentLocation, color) {
+  var originalCoordinates = currentLocation.split(',');
+  var row = originalCoordinates[0];
+  var column = originalCoordinates[1];
+
+  var legalMoves = [];
+  var workingPawn = [];
+  console.log(currentLocation);
+
+  myGame.board.squares.forEach(function(square) {
+    possibleMoves.forEach(function(move) {
+      var coordinate = move.split(',');
+      var x = parseInt(coordinate[0]);
+      var y = parseInt(coordinate[1]);
+      if (square.row === x && square.column === y) {
+        if (square.piece.piece === undefined && square.column == column) {
+          legalMoves.push(square);
+        } else if (square.piece.piece !== undefined && square.piece.piece.color !== color && square.column != column) {
+          legalMoves.push(square);
+        }
+      }
+    });
+  })
+  workingPawn.push(legalMoves);
+  console.log(workingPawn);
+  return workingPawn;
+}
 
 function knightCollision(possibleMoves, color) {
 
@@ -527,6 +552,10 @@ var MoveSets = function() {
 
   //Will have to be updated.
   this.pawn = function(location, color) {
+    // console.log(typeof location);
+    // if (location == '6,1') {
+    //   console.log('a');
+    // }
     var coordinate = location.split(',');
     var x = parseInt(coordinate[0]);
     var y = parseInt(coordinate[1]);
@@ -534,13 +563,21 @@ var MoveSets = function() {
     for (var row = 0; row <= 7; row++) {
       for (var column = 0; column <= 7; column++) {
         var legal = row.toString() + ',' + column.toString();
-        if ((row === x - 1 || row === x - 2) && color === 'white') {
-          if (column === y) {
+        if ((row === x - 1) && color === 'white') {
+          if (column === y || column === y + 1 || column === y - 1) {
               possibleMoves.push(legal);
           }
-        } else if ((row === x + 1 || row === x + 2) && color === 'black') {
-          if (column === y) {
+        } else if ((row === x + 1 ) && color === 'black') {
+          if (column === y || column === y + 1 || column === y - 1) {
               possibleMoves.push(legal);
+          }
+        } else if ((row === x - 2) && (color === 'white') && (location == '6,0' ||location == '6,1' ||location == '6,2' ||location == '6,3' ||location == '6,4' ||location == '6,5' ||location == '6,6' ||location == '6,7')) {
+          if (column === y) {
+            possibleMoves.push(legal);
+          }
+        } else if ((row === x + 2) && (color === 'black') && (location == '1,0' ||location == '1,1' ||location == '1,2' ||location == '1,3' ||location == '1,4' ||location == '1,5' ||location == '1,6' ||location == '1,7')) {
+          if (column === y) {
+            possibleMoves.push(legal);
           }
         }
       }
