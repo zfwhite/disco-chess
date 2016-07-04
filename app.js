@@ -272,6 +272,7 @@ myGame.start();
 function knightCollision(possibleMoves, color) {
 
   var legalMoves = [];
+  var workingKnight = [];
 
   myGame.board.squares.forEach(function(square) {
     possibleMoves.forEach(function(move) {
@@ -287,7 +288,8 @@ function knightCollision(possibleMoves, color) {
       }
     });
   })
-  return legalMoves;
+  workingKnight.push(legalMoves);
+  return workingKnight;
 }
 
 //Collision detection
