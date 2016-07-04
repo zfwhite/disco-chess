@@ -132,12 +132,28 @@ var Game = function(players) {
     // Set state to selecting.
     self.state = 'selecting'
   }
+
+  // players.forEach(function(player) {
+  //   if (player.name !== self.currentPlayer.name) {
+  //     self.currentPlayer = player;
+  //     self.state = 'selecting';
+  //     self.currentPiece = {};
+  //     self.moveSet = {};
+  //   }
+  // });
+
   this.nextTurn = function() {
-    players.forEach(function(player) {
-      if (player.name !== self.currentPlayer.name) {
-        self.currentPlayer = player;
-      }
-    });
+    if (self.currentPlayer == players[0]) {
+      self.currentPlayer = players[1];
+      self.state = 'selecting';
+      self.currentPiece = {};
+      self.moveSet = {};
+    } else {
+      self.currentPlayer = players[0];
+      self.state = 'selecting';
+      self.currentPiece = {};
+      self.moveSet = {};
+    }
   }
   this.move =
   this.HTML = function() {
@@ -165,6 +181,7 @@ var Game = function(players) {
     }
   });
   document.body.addEventListener('click', function(theEvent) {
+    var moveChoices;
     if (myGame.state == 'selecting') {
       var coordinate = theEvent.target.getAttribute('id').split(',');
       var row = coordinate[0];
@@ -180,34 +197,40 @@ var Game = function(players) {
             switch (square.piece.piece.type) {
               case "pawn":
                 var moves = moveSet.pawn(location, color);
-                console.log(collision(moves, location, color));
+                moveChoices = collision(moves, location, color);
+                console.log(moveChoices);
                 break;
               case "rook":
                 var moves = moveSet.rook(location);
-                console.log(collision(moves, location, color));
+                moveChoices = collision(moves, location, color);
+                console.log(moveChoices);
                 break;
               case "knight":
                 var moves = moveSet.knight(location);
-                console.log(knightCollision(moves, color));
+                moveChoices = knightCollision(moves, color);
+                console.log(moveChoices);
                 break;
               case "bishop":
                 var moves = moveSet.bishop(location);
-                console.log(collision(moves, location, color));
+                moveChoices = collision(moves, location, color);
+                console.log(moveChoices);
                 break;
               case "queen":
                 var moves = moveSet.queen(location);
-                console.log(collision(moves, location, color));
+                moveChoices = collision(moves, location, color);
+                console.log(moveChoices);
                 break;
               case "king":
                 var moves = moveSet.king(location);
-                console.log(collision(moves, location, color));
+                moveChoices = collision(moves, location, color);
+                console.log(moveChoices);
                 break;
             }
           }
         }
       });
     } else if (myGame.state == 'moving') {
-      myGame.state = 'selecting';
+      myGame.nextTurn();
     }
   });
 }
