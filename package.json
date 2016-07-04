@@ -1,0 +1,22 @@
+{
+  "name": "disco-chess",
+  "version": "1.0.0",
+  "description": "A chess game for chess players to play against each other online.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zfwhite/disco-chess.git"
+  },
+  "author": "Zachary White",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zfwhite/disco-chess/issues"
+  },
+  "homepage": "https://github.com/zfwhite/disco-chess#readme",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}
