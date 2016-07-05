@@ -122,7 +122,6 @@ var Game = function(players) {
   this.moveSet = {};
   this.state = '';
   this.lastLocation = '';
-  this.check = false;
 
   this.removedPiece = {};
   this.lastMove = {};
