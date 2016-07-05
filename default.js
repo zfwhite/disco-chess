@@ -149,11 +149,18 @@ var Game = function(players) {
      myGame.board.squares.forEach(function(square) {
        if (square.piece.piece != undefined) {
          var moves = checkMoves(square);
+        //  console.log(myGame.moveSet);
         //  if (myGame.moveSet[0] != '') {
-           myGame.moveSet[0].forEach(function(move) {
-             if (move.piece.piece != undefined) {
-               console.log(square.piece.piece.color + ' ' + square.piece.piece.type + ' attacking ' + move.piece.piece.color + ' ' + move.piece.piece.type);
-             }
+           self.moveSet.forEach(function(move) {
+             move.forEach(function(look) {
+               if (look.piece.piece != undefined && look.piece.piece.type == 'king') {
+                 console.log(square.piece.piece.color + ' ' + square.piece.piece.type + ' attacking ' + look.piece.piece.color + ' ' + look.piece.piece.type);
+               }
+             })
+            //  console.log(move);
+            //  if (move.piece.piece != undefined) {
+            //    console.log(square.piece.piece.color + ' ' + square.piece.piece.type + ' attacking ' + move.piece.piece.color + ' ' + move.piece.piece.type);
+            //  }
            });
         //  }
        }
@@ -233,6 +240,7 @@ var Game = function(players) {
         if (square.row == rowMove && square.column == columnMove) {
           self.moveSet.forEach(function(move) {
             move.forEach(function(legal) {
+              // console.log(legal);
               if (legal.column == columnMove && legal.row == rowMove) {
                 square.piece.piece = myGame.currentPiece;
                 myGame.board.squares.forEach(function(square) {
