@@ -86,9 +86,11 @@ var Board = function() {
             // Set the pieces.
             if (square.piece.piece === undefined) {
               theSquare.textContent = '';
-            } else {
+            } else if (square.piece.piece.color) {
               var pieceType = square.piece.piece.color.concat(square.piece.piece.type);
               theSquare.innerHTML = sprite[pieceType];
+            } else {
+              theSquare.textContent = '';
             }
             theRow.appendChild(theSquare);
             $('#board-placement').append(theRow);
@@ -120,6 +122,11 @@ var Game = function(players) {
   this.moveSet = {};
   this.state = '';
   this.lastLocation = '';
+  this.check = false;
+
+  this.removedPiece = {};
+  this.lastMove = {};
+
   var self = this;
   this.start = function() {
     // Draw the board.
@@ -143,31 +150,23 @@ var Game = function(players) {
   //   }
   // });
 
+// Checks if a player has been put in check.
   this.inCheck = function() {
      // Where is the king?
      // Run all possible moves for all opponents pieces, checking for king location.
      myGame.board.squares.forEach(function(square) {
        if (square.piece.piece != undefined) {
          var moves = checkMoves(square);
-        //  console.log(myGame.moveSet);
-        //  if (myGame.moveSet[0] != '') {
-           self.moveSet.forEach(function(move) {
-             move.forEach(function(look) {
-               if (look.piece.piece != undefined && look.piece.piece.type == 'king') {
-                 console.log(square.piece.piece.color + ' ' + square.piece.piece.type + ' attacking ' + look.piece.piece.color + ' ' + look.piece.piece.type);
-               }
-             })
-            //  console.log(move);
-            //  if (move.piece.piece != undefined) {
-            //    console.log(square.piece.piece.color + ' ' + square.piece.piece.type + ' attacking ' + move.piece.piece.color + ' ' + move.piece.piece.type);
-            //  }
-           });
-        //  }
+         self.moveSet.forEach(function(move) {
+           move.forEach(function(look) {
+             if (look.piece.piece != undefined && look.piece.piece.type == 'king') {
+               window.alert(look.piece.piece.color + ' ' + look.piece.piece.type + ' is in check!');
+               self.check = true;
+             }
+           })
+         });
        }
      })
-    //  if ('king is in check') {
-    //    self.check = true;
-    //  }
    }
 
    this.nextTurn = function() {
@@ -183,11 +182,20 @@ var Game = function(players) {
        self.moveSet = {};
      }
 
-    //  self.inCheck();
+     self.inCheck();
    }
 
-  this.move = function(location, moves) {
-
+  this.undoMove = function() {
+    myGame.board.squares.forEach(function(square) {
+      if (square.column == self.removedPiece.column && square.row == self.removedPiece.row) {
+        square.piece.piece = self.removedPiece.piece;
+      } else if (square.column == self.lastMove.column && square.row == self.lastMove.row) {
+        square.piece.piece = self.lastMove.piece;
+      }
+      $('#board-placement').empty();
+      myGame.board.boardHTML();
+    });
+    self.nextTurn();
   }
   this.HTML = function() {
     var status = document.createElement('div');
@@ -240,8 +248,21 @@ var Game = function(players) {
         if (square.row == rowMove && square.column == columnMove) {
           self.moveSet.forEach(function(move) {
             move.forEach(function(legal) {
-              // console.log(legal);
+              // Undo move
               if (legal.column == columnMove && legal.row == rowMove) {
+                if (square.piece.piece != undefined) {
+                  self.removedPiece.piece = legal.piece.piece;
+                } else {
+                  self.removedPiece = {};
+                }
+                self.removedPiece.column = legal.column;
+                self.removedPiece.row = legal.row;
+
+                var split = self.lastLocation.split(',');
+                self.lastMove.row = parseInt(split[0]);
+                self.lastMove.column = parseInt(split[1]);
+                self.lastMove.piece = myGame.currentPiece;
+                //finish undo move
                 square.piece.piece = myGame.currentPiece;
                 myGame.board.squares.forEach(function(square) {
                   if (square.row == rowRemove && square.column == columnRemove) {
@@ -250,7 +271,6 @@ var Game = function(players) {
                 });
                 $('#board-placement').empty();
                 myGame.board.boardHTML();
-                myGame.inCheck();
                 myGame.nextTurn();
               }
             })
