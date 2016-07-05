@@ -152,7 +152,6 @@ var Game = function(players) {
 
 // Checks if a player has been put in check.
   this.inCheck = function() {
-     // Where is the king?
      // Run all possible moves for all opponents pieces, checking for king location.
      myGame.board.squares.forEach(function(square) {
        if (square.piece.piece != undefined) {
@@ -160,8 +159,10 @@ var Game = function(players) {
          self.moveSet.forEach(function(move) {
            move.forEach(function(look) {
              if (look.piece.piece != undefined && look.piece.piece.type == 'king') {
-               window.alert(look.piece.piece.color + ' ' + look.piece.piece.type + ' is in check!');
-               self.check = true;
+               if (look.piece.piece.color != myGame.currentPlayer.color) {
+                 window.alert(look.piece.piece.color + ' ' + look.piece.piece.type + ' is in check!');
+                 myGame.undoMove();
+               }
              }
            })
          });
@@ -220,6 +221,11 @@ var Game = function(players) {
       self.currentPiece = {};
       self.moveSet = {};
       self.state = 'selecting';
+    }
+  });
+  document.body.addEventListener('click', function(theEvent) {
+    if (theEvent.target.getAttribute('undo-move')) {
+      self.undoMove();
     }
   });
   document.body.addEventListener('click', function(theEvent) {
