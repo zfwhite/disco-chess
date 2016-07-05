@@ -140,14 +140,42 @@ var Game = function(players) {
     self.state = 'selecting'
   }
 
-  // players.forEach(function(player) {
-  //   if (player.name !== self.currentPlayer.name) {
-  //     self.currentPlayer = player;
-  //     self.state = 'selecting';
-  //     self.currentPiece = {};
-  //     self.moveSet = {};
-  //   }
-  // });
+  // Check if castling is possible.
+  this.castleCheck = function(color) {
+    myGame.board.squares.forEach(function(square) {
+      if (color === 'white') {
+        if (square.column === 4 && square.row === 7) {
+          if (square.piece.piece === undefined || square.piece.piece.type !== 'king') {
+            white.queenCastle = false;
+            white.kingCastle = false;
+          }
+        } else if (square.column === 0 && square.row === 7) {
+          if (square.piece.piece === undefined || square.piece.piece.type !== 'rook') {
+            white.queenCastle = false;
+          }
+        } else if (square.column === 7 && square.row === 7) {
+          if (square.piece.piece === undefined || square.piece.piece.type !== 'rook') {
+            white.kingCastle = false;
+          }
+        }
+      } else if (color === 'black') {
+        if (square.column === 4 && square.row === 0) {
+          if (square.piece.piece === undefined || square.piece.piece.type !== 'king') {
+            black.queenCastle = false;
+            black.kingCastle = false;
+          }
+        } else if (square.column === 0 && square.row === 0) {
+          if (square.piece.piece === undefined || square.piece.piece.type !== 'rook') {
+            black.queenCastle = false;
+          }
+        } else if (square.column === 7 && square.row === 0) {
+          if (square.piece.piece === undefined || square.piece.piece.type !== 'rook') {
+            black.kingCastle = false;
+          }
+        }
+      }
+    })
+  }
 
 // Checks if a player has been put in check.
   this.inCheck = function() {
@@ -181,7 +209,6 @@ var Game = function(players) {
        self.currentPiece = {};
        self.moveSet = {};
      }
-
      self.inCheck();
    }
 
@@ -230,6 +257,19 @@ var Game = function(players) {
   document.body.addEventListener('click', function(theEvent) {
     var moveChoices;
     if (myGame.state == 'selecting') {
+      if (myGame.currentPlayer.color === 'white') {
+        if (white.kingCastle === true) {
+          myGame.castleCheck(self.currentPlayer.color);
+        } else if (white.queenCastle === true) {
+          myGame.castleCheck(self.currentPlayer.color);
+        }
+      } else if (myGame.currentPlayer.color === 'black') {
+        if (black.kingCastle === true) {
+          myGame.castleCheck(self.currentPlayer.color);
+        } else if (black.queenCastle === true) {
+          myGame.castleCheck(self.currentPlayer.color);
+        }
+      }
       var coordinate = theEvent.target.getAttribute('id').split(',');
       var row = coordinate[0];
       var column = coordinate[1];
@@ -289,10 +329,13 @@ var Game = function(players) {
 var Player = function(name, color) {
   this.name = name;
   this.color = color;
+  // Allows castling while true.
+  this.kingCastle = true;
+  this.queenCastle = true;
 }
-var ron = new Player('Ron', 'white');
-var zach = new Player('Zach', 'black');
-var myGame = new Game([ron, zach]);
+var white = new Player('Ron', 'white');
+var black = new Player('Zach', 'black');
+var myGame = new Game([white, black]);
 myGame.start();
 
 function checkMoves(square) {
