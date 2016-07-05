@@ -143,16 +143,25 @@ var Game = function(players) {
   //   }
   // });
 
-  // this.inCheck = function() {
-  //    // Where is the king?
-  //    // Run all possible moves for all opponents pieces, checking for king location.
-  //    myGame.board.squares.forEach(function(square) {
-  //      checkMoves(square.piece.piece.type);
-  //    })
-  //    if ('king is in check') {
-  //      self.check = true;
-  //    }
-  //  }
+  this.inCheck = function() {
+     // Where is the king?
+     // Run all possible moves for all opponents pieces, checking for king location.
+     myGame.board.squares.forEach(function(square) {
+       if (square.piece.piece != undefined) {
+         var moves = checkMoves(square);
+        //  if (myGame.moveSet[0] != '') {
+           myGame.moveSet[0].forEach(function(move) {
+             if (move.piece.piece != undefined) {
+               console.log(square.piece.piece.color + ' ' + square.piece.piece.type + ' attacking ' + move.piece.piece.color + ' ' + move.piece.piece.type);
+             }
+           });
+        //  }
+       }
+     })
+    //  if ('king is in check') {
+    //    self.check = true;
+    //  }
+   }
 
    this.nextTurn = function() {
      if (self.currentPlayer == players[0]) {
@@ -233,6 +242,7 @@ var Game = function(players) {
                 });
                 $('#board-placement').empty();
                 myGame.board.boardHTML();
+                myGame.inCheck();
                 myGame.nextTurn();
               }
             })
@@ -242,6 +252,7 @@ var Game = function(players) {
     }
   });
 }
+
 var Player = function(name, color) {
   this.name = name;
   this.color = color;
@@ -253,34 +264,36 @@ myGame.start();
 
 function checkMoves(square) {
   var moveSet = new MoveSets();
-  var color = square.piece.piece.color;
-  var location = square.row + "," + square.column;
-  myGame.lastLocation = location;
-  switch (square.piece.piece.type) {
-    case "pawn":
-      var moves = moveSet.pawn(location, color);
-      myGame.moveSet = pawnCollision(moves, location, color);
-      break;
-    case "rook":
-      var moves = moveSet.rook(location);
-      myGame.moveSet = collision(moves, location, color);
-      break;
-    case "knight":
-      var moves = moveSet.knight(location);
-      myGame.moveSet = knightCollision(moves, color);
-      break;
-    case "bishop":
-      var moves = moveSet.bishop(location);
-      myGame.moveSet = collision(moves, location, color);
-      break;
-    case "queen":
-      var moves = moveSet.queen(location);
-      myGame.moveSet = collision(moves, location, color);
-      break;
-    case "king":
-      var moves = moveSet.king(location);
-      myGame.moveSet = collision(moves, location, color);
-      break;
+  if (square.piece.piece != undefined) {
+    var color = square.piece.piece.color;
+    var location = square.row + "," + square.column;
+    myGame.lastLocation = location;
+    switch (square.piece.piece.type) {
+      case "pawn":
+        var moves = moveSet.pawn(location, color);
+        myGame.moveSet = pawnCollision(moves, location, color);
+        break;
+      case "rook":
+        var moves = moveSet.rook(location);
+        myGame.moveSet = collision(moves, location, color);
+        break;
+      case "knight":
+        var moves = moveSet.knight(location);
+        myGame.moveSet = knightCollision(moves, color);
+        break;
+      case "bishop":
+        var moves = moveSet.bishop(location);
+        myGame.moveSet = collision(moves, location, color);
+        break;
+      case "queen":
+        var moves = moveSet.queen(location);
+        myGame.moveSet = collision(moves, location, color);
+        break;
+      case "king":
+        var moves = moveSet.king(location);
+        myGame.moveSet = collision(moves, location, color);
+        break;
+    }
   }
 }
 
