@@ -474,8 +474,8 @@ var Player = function(name, color) {
   this.kingCastle = true;
   this.queenCastle = true;
 }
-var white = new Player('Ron', 'white');
-var black = new Player('Zach', 'black');
+var white = new Player('Player 1', 'white');
+var black = new Player('Player 2', 'black');
 var myGame = new Game([white, black]);
 myGame.start();
 
