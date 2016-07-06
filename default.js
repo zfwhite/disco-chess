@@ -426,7 +426,6 @@ var Game = function(players) {
               for (const move of placed) {
                 var change = document.getElementById(move.row.toString() + ',' + move.column.toString());
                 change.classList.add('path');
-                console.log(change);
               }
             }
           }
