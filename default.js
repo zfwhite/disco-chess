@@ -177,6 +177,38 @@ var Game = function(players) {
     })
   }
 
+  // Actually makes the kingside castle move.
+ this.kingSide = function(color) {
+   var castle = true;
+   for (const square of myGame.board.squares) {
+     if (color === 'white' && white.kingCastle === true) {
+       if (square.column === 6 && square.row === 7) {
+         if (square.piece.piece === undefined) {
+           console.log('a');
+           square.piece = {piece: {color: 'white', type: 'king'}};
+         } else {
+           castle = false;
+         }
+       } else if (square.column === 5 && square.row === 7) {
+         if (square.piece.piece === undefined) {
+           console.log('b');
+           square.piece = {piece: {color: 'white', type: 'rook'}};
+         } else {
+           castle = false;
+         }
+       }
+       if (square.column === 4 && square.row === 7) {
+         square.piece = {};
+       } if (square.column === 7 && square.row === 7) {
+         square.piece = {};
+       }
+       $('#board-placement').empty();
+       myGame.board.boardHTML();
+       myGame.nextTurn();
+     }
+   }
+ }
+
 // Checks if a player has been put in check.
   this.inCheck = function() {
      // Run all possible moves for all opponents pieces, checking for king location.
