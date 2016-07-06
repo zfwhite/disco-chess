@@ -181,30 +181,57 @@ var Game = function(players) {
  this.kingSide = function(color) {
    var castle = true;
    for (const square of myGame.board.squares) {
-     if (color === 'white' && white.kingCastle === true) {
+     if (color === 'white' && myGame.currentPlayer.color === 'white') {
        if (square.column === 6 && square.row === 7) {
-         if (square.piece.piece === undefined) {
-           console.log('a');
-           square.piece = {piece: {color: 'white', type: 'king'}};
-         } else {
-           castle = false;
+         if (square.piece.piece !== undefined) {
+          castle = false;
          }
        } else if (square.column === 5 && square.row === 7) {
-         if (square.piece.piece === undefined) {
-           console.log('b');
-           square.piece = {piece: {color: 'white', type: 'rook'}};
-         } else {
-           castle = false;
+         if (square.piece.piece !== undefined) {
+          castle = false;
          }
        }
-       if (square.column === 4 && square.row === 7) {
-         square.piece = {};
-       } if (square.column === 7 && square.row === 7) {
-         square.piece = {};
+     } else if (color === 'black' && myGame.currentPlayer.color === 'black') {
+       if (square.column === 6 && square.row === 0) {
+         if (square.piece.piece !== undefined) {
+          castle = false;
+         }
+       } else if (square.column === 5 && square.row === 0) {
+         if (square.piece.piece !== undefined) {
+          castle = false;
+         }
        }
-       $('#board-placement').empty();
-       myGame.board.boardHTML();
-       myGame.nextTurn();
+     }
+   }
+   for (const squares of myGame.board.squares) {
+     if (castle === true && color === 'white' && white.kingCastle === true && myGame.currentPlayer.color === 'white') {
+       if (squares.column === 4 && squares.row === 7) {
+         squares.piece = {};
+       } if (squares.column === 7 && squares.row === 7) {
+         squares.piece = {};
+         $('#board-placement').empty();
+         myGame.board.boardHTML();
+         myGame.nextTurn();
+       }
+       if (squares.column === 6 && squares.row === 7) {
+        squares.piece = {piece: {color: 'white', type: 'king'}};
+      } else if (squares.column === 5 && squares.row === 7) {
+        squares.piece = {piece: {color: 'white', type: 'rook'}};
+       }
+     } else if (castle === true && color === 'black' && black.kingCastle === true && myGame.currentPlayer.color === 'black') {
+       if (squares.column === 4 && squares.row === 0) {
+         squares.piece = {};
+       } if (squares.column === 7 && squares.row === 0) {
+         squares.piece = {};
+         $('#board-placement').empty();
+         myGame.board.boardHTML();
+         myGame.nextTurn();
+       }
+       if (squares.column === 6 && squares.row === 0) {
+        squares.piece = {piece: {color: 'black', type: 'king'}};
+      } else if (squares.column === 5 && squares.row === 0) {
+        squares.piece = {piece: {color: 'black', type: 'rook'}};
+       }
      }
    }
  }
