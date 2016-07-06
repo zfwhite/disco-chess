@@ -177,7 +177,7 @@ var Game = function(players) {
     })
   }
 
-  // Actually makes the kingside castle move.
+  // Makes the kingside castle move.
  this.kingSide = function(color) {
    var castle = true;
    for (const square of myGame.board.squares) {
@@ -221,7 +221,7 @@ var Game = function(players) {
      } else if (castle === true && color === 'black' && black.kingCastle === true && myGame.currentPlayer.color === 'black') {
        if (squares.column === 4 && squares.row === 0) {
          squares.piece = {};
-       } if (squares.column === 7 && squares.row === 0) {
+       } else if (squares.column === 7 && squares.row === 0) {
          squares.piece = {};
          $('#board-placement').empty();
          myGame.board.boardHTML();
@@ -230,6 +230,77 @@ var Game = function(players) {
        if (squares.column === 6 && squares.row === 0) {
         squares.piece = {piece: {color: 'black', type: 'king'}};
       } else if (squares.column === 5 && squares.row === 0) {
+        squares.piece = {piece: {color: 'black', type: 'rook'}};
+       }
+     }
+   }
+ }
+
+ // Queen side castling.
+ this.queenSide = function(color) {
+   var castle = true;
+   for (const square of myGame.board.squares) {
+     if (color === 'white' && myGame.currentPlayer.color === 'white') {
+       if (square.column === 1 && square.row === 7) {
+         if (square.piece.piece !== undefined) {
+          castle = false;
+         }
+       } else if (square.column === 2 && square.row === 7) {
+         if (square.piece.piece !== undefined) {
+          castle = false;
+         }
+       } else if (square.column === 3 && square.row === 7) {
+         if (square.piece.piece !== undefined) {
+          castle = false;
+         }
+       }
+     } else if (color === 'black' && myGame.currentPlayer.color === 'black') {
+       if (square.column === 1 && square.row === 0) {
+         if (square.piece.piece !== undefined) {
+          castle = false;
+         }
+       } else if (square.column === 2 && square.row === 0) {
+         if (square.piece.piece !== undefined) {
+          castle = false;
+         }
+       } else if (square.column === 3 && square.row === 0) {
+         if (square.piece.piece !== undefined) {
+          castle = false;
+         }
+       }
+     }
+   }
+   for (const squares of myGame.board.squares) {
+     if (castle === true && color === 'white' && white.queenCastle === true && myGame.currentPlayer.color === 'white') {
+       if (squares.column === 0 && squares.row === 7) {
+         squares.piece = {};
+       } else if (squares.column === 2 && squares.row === 7) {
+         squares.piece = {};
+       } else if (squares.column === 4 && squares.row === 7) {
+         squares.piece = {};
+         $('#board-placement').empty();
+         myGame.board.boardHTML();
+         myGame.nextTurn();
+       }
+       if (squares.column === 2 && squares.row === 7) {
+        squares.piece = {piece: {color: 'white', type: 'king'}};
+      } else if (squares.column === 3 && squares.row === 7) {
+        squares.piece = {piece: {color: 'white', type: 'rook'}};
+       }
+     } else if (castle === true && color === 'black' && black.queenCastle === true && myGame.currentPlayer.color === 'black') {
+       if (squares.column === 0 && squares.row === 0) {
+         squares.piece = {};
+       } else if (squares.column === 2 && squares.row === 0) {
+         squares.piece = {};
+       } else if (squares.column === 4 && squares.row === 0) {
+         squares.piece = {};
+         $('#board-placement').empty();
+         myGame.board.boardHTML();
+         myGame.nextTurn();
+       }
+       if (squares.column === 2 && squares.row === 0) {
+        squares.piece = {piece: {color: 'black', type: 'king'}};
+      } else if (squares.column === 3 && squares.row === 0) {
         squares.piece = {piece: {color: 'black', type: 'rook'}};
        }
      }
@@ -301,6 +372,17 @@ var Game = function(players) {
     status.appendChild(state)
     return status;
   }
+
+  document.body.addEventListener('click', function(theEvent) {
+    if (theEvent.target.getAttribute('queen-castle')) {
+      self.queenSide(self.currentPlayer.color);
+    }
+  });
+  document.body.addEventListener('click', function(theEvent) {
+    if (theEvent.target.getAttribute('king-castle')) {
+      self.kingSide(self.currentPlayer.color);
+    }
+  });
   document.body.addEventListener('click', function(theEvent) {
     if (theEvent.target.getAttribute('data-unselect')) {
       self.currentPiece = {};
