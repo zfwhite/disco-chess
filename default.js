@@ -385,6 +385,7 @@ var Game = function(players) {
   });
   document.body.addEventListener('click', function(theEvent) {
     if (theEvent.target.getAttribute('data-unselect')) {
+      $('.path').removeClass('path');
       self.currentPiece = {};
       self.moveSet = {};
       self.state = 'selecting';
@@ -420,10 +421,19 @@ var Game = function(players) {
             myGame.state = 'moving';
             myGame.currentPiece = square.piece.piece;
             checkMoves(square);
+            // console.log(myGame.moveSet);
+            for (const placed of myGame.moveSet) {
+              for (const move of placed) {
+                var change = document.getElementById(move.row.toString() + ',' + move.column.toString());
+                change.classList.add('path');
+                console.log(change);
+              }
+            }
           }
         }
       });
     } else if (myGame.state == 'moving') {
+      $('.path').removeClass('path');
       var coordinateMove = theEvent.target.getAttribute('id').split(',');
       var rowMove = coordinateMove[0];
       var columnMove = coordinateMove[1];

@@ -18,6 +18,10 @@
   font-size: 50px;
 }
 
+.path {
+  border: 3px solid red;
+}
+
 /*#space {
   margin-left: 360px
 }*/
