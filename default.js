@@ -432,7 +432,6 @@ var Game = function(players) {
         }
       });
     } else if (myGame.state == 'moving') {
-      $('.path').removeClass('path');
       var coordinateMove = theEvent.target.getAttribute('id').split(',');
       var rowMove = coordinateMove[0];
       var columnMove = coordinateMove[1];
@@ -464,6 +463,7 @@ var Game = function(players) {
                     square.piece = {};
                   }
                 });
+                $('.path').removeClass('path');
                 $('#board-placement').empty();
                 myGame.board.boardHTML();
                 myGame.nextTurn();
