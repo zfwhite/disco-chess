@@ -13,4 +13,4 @@ app.get('/default.css', function(req, res) {
   res.sendFile(__dirname + '/default.css');
 });
 
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
