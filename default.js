@@ -99,8 +99,6 @@ var Board = function() {
       }
     }
   }
-  this.move = function() {
-  }
 }
 var Square = function(row, column, color) {
   return {
