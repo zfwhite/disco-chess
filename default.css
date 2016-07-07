@@ -26,11 +26,6 @@ button {
   font-size: 50px;
   border-radius: 1px;
 }
-/*.light.path {
-  border: 2px solid blue;
-  border-bottom: none;
-  border-top: none;
-}*/
 .path {
   border: 2px solid red !important;
 }
@@ -53,7 +48,7 @@ button {
   width: 220px;
   background: #0093D1;
   position: fixed;
-  height: 30%;
+  height: 35%;
   overflow-y: auto;
   z-index: 1000;
   border-radius: 6px;
@@ -64,14 +59,14 @@ button {
   width: 100%;
 }
 
-.sidebar-nav {
+/*.sidebar-nav {
   position: absolute;
   top: 0;
   width: 250px;
   list-style: none;
   margin: 0;
   padding: 0;
-}
+}*/
 
 /*@media (max-width:767px) {
 
