@@ -151,8 +151,6 @@ var Game = function(players) {
 
   //Pawn promotion functions
   this.checkPromotion = function(row, color, piece) {
-    // var coordinates = square.split(',');
-    // var row = parseInt(coordinates[0]);
     if (((color === 'white' && row === 0) || (color === 'black' && row === 7)) && piece === 'pawn') {
       myGame.pawnPromotion = true;
     }
@@ -509,10 +507,10 @@ var Game = function(players) {
                 myGame.board.boardHTML();
                 myGame.nextTurn();
               }
-            })
-          })
+            });
+          });
         }
-      })
+      });
     }
   });
 }
