@@ -48,13 +48,13 @@ button {
   width: 220px;
   background: #0093D1;
   position: fixed;
-  height: 45%;
+  height: 50%;
   overflow-y: auto;
   z-index: 1000;
   border-radius: 6px;
   transition: all 0.4s ease 0s;
 }
-#pawn-promotion {
+/*#pawn-promotion {
   padding: 20px;
   margin-top: 40px;
   margin-left: -200px;
@@ -67,7 +67,7 @@ button {
   z-index: 1000;
   border-radius: 6px;
   transition: all 0.4s ease 0s;
-}bottom
+}bottom*/
 
 #page-content-wrapper {
   width: 100%;

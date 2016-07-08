@@ -12,6 +12,15 @@ var sprite = {
   blackknight: '&#9822;',
   blackpawn: '&#9823;'
 };
+var OuterHTML = function() {
+  this.promotePawn = function () {
+    if (myGame.pawnPromotion === true) {
+      var promotion = prompt('Enter "queen" or "knight" to be promoted.');
+      return promotion;
+    }
+  }
+}
+var draw = new OuterHTML();
 var Board = function() {
   this.squares = [];
   var self = this;
@@ -140,20 +149,23 @@ var Game = function(players) {
     self.state = 'selecting'
   }
 
-  this.checkPromotion = function(square, color, piece) {
-    var coordinates = square.split(',');
-    var row = parseInt(coordinates[0]);
-    var column = parseInt(coordinates[1]);
+  //Pawn promotion functions
+  this.checkPromotion = function(row, color, piece) {
+    // var coordinates = square.split(',');
+    // var row = parseInt(coordinates[0]);
     if (((color === 'white' && row === 0) || (color === 'black' && row === 7)) && piece === 'pawn') {
       myGame.pawnPromotion = true;
     }
   }
-
-  this.promotePawn = function (square, color) {
-    if (myGame.pawnPromotion === true) {
-      $('#pawn-promotion').removeClass('hidden');
-    } else {
-      $('pawn-promotion').addClass('hidden');
+  this.givePromotion = function(location, piece, color) {
+    // var coordinates = location.split(',');
+    var row = parseInt(location[0]);
+    var column = parseInt(location[1]);
+    for (const square of myGame.board.squares) {
+      if (square.row == row && square.column == column) {
+        square.piece.piece.type = piece;
+        square.piece.piece.color = color;
+      }
     }
   }
 
@@ -480,6 +492,18 @@ var Game = function(players) {
                     square.piece = {};
                   }
                 });
+                //Promote pawn
+                myGame.checkPromotion(square.row, legal.piece.piece.color, legal.piece.piece.type);
+                if (myGame.pawnPromotion === true) {
+                  var promote = draw.promotePawn();
+                  if (promote === 'queen' || promote === 'knight') {
+                    myGame.givePromotion(coordinateMove, promote, myGame.currentPlayer.color)
+                    myGame.pawnPromotion = false;
+                  } else {
+                    myGame.givePromotion(coordinateMove, 'queen', myGame.currentPlayer.color)
+                    myGame.pawnPromotion = false;
+                  }
+                }
                 $('.path').removeClass('path');
                 $('#board-placement').empty();
                 myGame.board.boardHTML();
