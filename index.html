@@ -18,22 +18,33 @@
   </head>
   <body>
     <div id="wrapper">
-    <div id="sidebar-wrapper">
-        <!-- <div class="panel panel-primary well"> -->
-          <!-- <div class="panel-heading clearfix"> -->
-            <h3>Disco Chess!</h1>
-            <div id="information">
+      <div id="sidebar-wrapper">
+        <h3>Disco Chess!</h3>
+        <h5>Rules</h5>
+          <ol>
+            <li>Make groovy moves.</li>
+            <li>Boogey down.</li>
+            <li>????</li>
+            <li>Profit.</li>
+          </ol>
+        <div id="information">
 
-            </div>
-            <div class="btn-group-vertical">
-              <button type="button" class="btn btn-default" data-unselect='unselect'>Unselect Piece</button>
-              <button type="button" class="btn btn-default" queen-castle='unselect'>Castle Queen Side</button>
-              <button type="button" class="btn btn-default" id="space" king-castle='undo'>Castle King Side</button>
-            </div>
-          <!-- </div> -->
-        <!-- </div> -->
-    </div>
-    <div id="page-content-wrapper">
+        </div>
+        <div class="btn-group-vertical">
+          <button type="button" class="btn btn-default" data-unselect='unselect'>Unselect Piece</button>
+          <button type="button" class="btn btn-default" queen-castle='unselect'>Castle Queen Side</button>
+          <button type="button" class="btn btn-default" id="space" king-castle='undo'>Castle King Side</button>
+        </div>
+        <div id="pawn-promotion" class="hidden">
+          <h4>Promoted to?</h4>
+          <button type="button" id="promote-knight" class="btn btn-default" name="button">Knight</button>
+          <button type="button" id="promote-queen" class="btn btn-default" name="button">Queen</button>
+          <button type="button" id="promote-bishop" class="btn btn-default" name="button">Bishop</button>
+          <button type="button" id="promote-rook" class="btn btn-default" name="button">Rook</button>
+        </div>
+      </div>
+
+      <div id="page-content-wrapper">
         <div class="page-content">
             <div class="container">
                 <div class="row">
@@ -45,27 +56,6 @@
         </div>
     </div>
 </div>
-    <!-- <div class="container">
-      <div class="row">
-        <div id="outer-board" class="col-xs-12">
-          <div class="panel panel-primary well">
-            <div class="panel-heading clearfix">
-              <div id="information" class="panel-body">
-
-              </div>
-              <button type="button" class="btn btn-default" data-unselect='unselect'>Unselect Piece</button>
-              <button type="button" class="btn btn-default" queen-castle='unselect'>Castle Queen Side</button>
-              <button type="button" class="btn btn-default" id="space" king-castle='undo'>Castle King Side</button>
-            </div>
-            <div class="col-xs-2">
-            </div>
-          </div>
-          <div id="board-placement"class="col-xs-12">
-
-          </div>
-        </div>
-      </div>
-    </div> -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins)-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed-->

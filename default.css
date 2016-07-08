@@ -27,7 +27,7 @@ button {
   border-radius: 1px;
 }
 .path {
-  border: 2px solid red !important;
+  border: 2px solid red;
 }
 .path + .path {
   border-left: none;
@@ -48,12 +48,26 @@ button {
   width: 220px;
   background: #0093D1;
   position: fixed;
-  height: 35%;
+  height: 45%;
   overflow-y: auto;
   z-index: 1000;
   border-radius: 6px;
   transition: all 0.4s ease 0s;
 }
+#pawn-promotion {
+  padding: 20px;
+  margin-top: 40px;
+  margin-left: -200px;
+  left: 250px;
+  width: 220px;
+  background: #0093D1;
+  position: fixed;
+  height: 22%;
+  overflow-y: auto;
+  z-index: 1000;
+  border-radius: 6px;
+  transition: all 0.4s ease 0s;
+}bottom
 
 #page-content-wrapper {
   width: 100%;

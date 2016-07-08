@@ -124,6 +124,8 @@ var Game = function(players) {
   this.removedPiece = {};
   this.lastMove = {};
 
+  this.pawnPromotion = false;
+
   var self = this;
   this.start = function() {
     // Draw the board.
@@ -136,6 +138,23 @@ var Game = function(players) {
     });
     // Set state to selecting.
     self.state = 'selecting'
+  }
+
+  this.checkPromotion = function(square, color, piece) {
+    var coordinates = square.split(',');
+    var row = parseInt(coordinates[0]);
+    var column = parseInt(coordinates[1]);
+    if (((color === 'white' && row === 0) || (color === 'black' && row === 7)) && piece === 'pawn') {
+      myGame.pawnPromotion = true;
+    }
+  }
+
+  this.promotePawn = function (square, color) {
+    if (myGame.pawnPromotion === true) {
+      $('#pawn-promotion').removeClass('hidden');
+    } else {
+      $('pawn-promotion').addClass('hidden');
+    }
   }
 
   // Check if castling is possible.
