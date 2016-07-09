@@ -448,7 +448,6 @@ var Game = function(players) {
             myGame.state = 'moving';
             myGame.currentPiece = square.piece.piece;
             checkMoves(square);
-            // console.log(myGame.moveSet);
             for (const placed of myGame.moveSet) {
               for (const move of placed) {
                 var change = document.getElementById(move.row.toString() + ',' + move.column.toString());
@@ -725,20 +724,6 @@ function pathEnd(array) {
   return array;
 }
 
-//get smallest number out of an array
-//check if smallest distance has a piece on it, if not remove
-//from array and add to actualMoves
-//if so, check pieces color and whether it is legal or not to land on
-//remove other pieces
-// function getSmallest(array) {
-//   Array.min = function(array) {
-//     return Math.min.apply(Math, array);
-//   }
-//   var smallest = Array.min(array);
-//   var indexDistance = array.indexOf(smallest);
-//   return indexDistance;
-// }
-
 //Add to moveSets.
 var MoveSets = function() {
   this.king = function(location) {
@@ -859,11 +844,11 @@ var MoveSets = function() {
           if (column === y || column === y + 1 || column === y - 1) {
               possibleMoves.push(legal);
           }
-        } else if ((row === x - 2) && (color === 'white') && (location == '6,0' ||location == '6,1' ||location == '6,2' ||location == '6,3' ||location == '6,4' ||location == '6,5' ||location == '6,6' ||location == '6,7')) {
+        } else if ((row === x - 2) && (color === 'white') && x === 6) {
           if (column === y) {
             possibleMoves.push(legal);
           }
-        } else if ((row === x + 2) && (color === 'black') && (location == '1,0' ||location == '1,1' ||location == '1,2' ||location == '1,3' ||location == '1,4' ||location == '1,5' ||location == '1,6' ||location == '1,7')) {
+        } else if ((row === x + 2) && (color === 'black') && x === 1) {
           if (column === y) {
             possibleMoves.push(legal);
           }
