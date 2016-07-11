@@ -12,15 +12,41 @@ var sprite = {
   blackknight: '&#9822;',
   blackpawn: '&#9823;'
 };
-var OuterHTML = function() {
+var DrawHTML = function() {
   this.promotePawn = function () {
     if (myGame.pawnPromotion === true) {
       var promotion = prompt('Enter "queen" or "knight" to be promoted.');
       return promotion;
     }
   }
+  this.boardHTML = function() {
+    for (var row = 0; row <= 7; row++) {
+      var theRow = document.createElement('div');
+      theRow.classList.add('row');
+      for (var column = 0; column <= 7; column++) {
+        myGame.board.squares.forEach(function(square) {
+          if (square.row == row && square.column == column) {
+            var theSquare = document.createElement('div');
+            theSquare.classList.add('col-xs-1');
+            theSquare.classList.add(square.color);
+            theSquare.setAttribute('id', row + ',' + column);
+            // Set the pieces.
+            if (square.piece.piece === undefined) {
+              theSquare.textContent = '';
+            } else if (square.piece.piece.color) {
+              var pieceType = square.piece.piece.color.concat(square.piece.piece.type);
+              theSquare.innerHTML = sprite[pieceType];
+            } else {
+              theSquare.textContent = '';
+            }
+            theRow.appendChild(theSquare);
+            $('#board-placement').append(theRow);
+          }
+        });
+      }
+    }
+  }
 }
-var draw = new OuterHTML();
 var Board = function() {
   this.squares = [];
   var self = this;
@@ -81,33 +107,7 @@ var Board = function() {
       }
     });
   });
-  this.boardHTML = function() {
-    for (var row = 0; row <= 7; row++) {
-      var theRow = document.createElement('div');
-      theRow.classList.add('row');
-      for (var column = 0; column <= 7; column++) {
-        this.squares.forEach(function(square) {
-          if (square.row == row && square.column == column) {
-            var theSquare = document.createElement('div');
-            theSquare.classList.add('col-xs-1');
-            theSquare.classList.add(square.color);
-            theSquare.setAttribute('id', row + ',' + column);
-            // Set the pieces.
-            if (square.piece.piece === undefined) {
-              theSquare.textContent = '';
-            } else if (square.piece.piece.color) {
-              var pieceType = square.piece.piece.color.concat(square.piece.piece.type);
-              theSquare.innerHTML = sprite[pieceType];
-            } else {
-              theSquare.textContent = '';
-            }
-            theRow.appendChild(theSquare);
-            $('#board-placement').append(theRow);
-          }
-        });
-      }
-    }
-  }
+  this.draw = new DrawHTML();
 }
 var Square = function(row, column, color) {
   return {
@@ -138,7 +138,7 @@ var Game = function(players) {
   var self = this;
   this.start = function() {
     // Draw the board.
-    this.board.boardHTML();
+    this.board.draw.boardHTML();
     // Set the player to white for the first turn.
     players.forEach(function(player) {
       if (player.color == 'white') {
@@ -201,7 +201,7 @@ var Game = function(players) {
           }
         }
       }
-    })
+    });
   }
 
   // Makes the kingside castle move.
@@ -237,7 +237,7 @@ var Game = function(players) {
        } if (squares.column === 7 && squares.row === 7) {
          squares.piece = {};
          $('#board-placement').empty();
-         myGame.board.boardHTML();
+         myGame.board.draw.boardHTML();
          myGame.nextTurn();
        }
        if (squares.column === 6 && squares.row === 7) {
@@ -251,7 +251,7 @@ var Game = function(players) {
        } else if (squares.column === 7 && squares.row === 0) {
          squares.piece = {};
          $('#board-placement').empty();
-         myGame.board.boardHTML();
+         myGame.board.draw.boardHTML();
          myGame.nextTurn();
        }
        if (squares.column === 6 && squares.row === 0) {
@@ -306,7 +306,7 @@ var Game = function(players) {
        } else if (squares.column === 4 && squares.row === 7) {
          squares.piece = {};
          $('#board-placement').empty();
-         myGame.board.boardHTML();
+         myGame.board.draw.boardHTML();
          myGame.nextTurn();
        }
        if (squares.column === 2 && squares.row === 7) {
@@ -322,7 +322,7 @@ var Game = function(players) {
        } else if (squares.column === 4 && squares.row === 0) {
          squares.piece = {};
          $('#board-placement').empty();
-         myGame.board.boardHTML();
+         myGame.board.draw.boardHTML();
          myGame.nextTurn();
        }
        if (squares.column === 2 && squares.row === 0) {
@@ -377,7 +377,7 @@ var Game = function(players) {
         square.piece.piece = self.lastMove.piece;
       }
       $('#board-placement').empty();
-      myGame.board.boardHTML();
+      myGame.board.draw.boardHTML();
     });
     self.nextTurn();
   }
@@ -492,7 +492,7 @@ var Game = function(players) {
                 //Promote pawn
                 myGame.checkPromotion(square.row, legal.piece.piece.color, legal.piece.piece.type);
                 if (myGame.pawnPromotion === true) {
-                  var promote = draw.promotePawn();
+                  var promote = myGame.board.draw.promotePawn();
                   if (promote === 'queen' || promote === 'knight') {
                     myGame.givePromotion(coordinateMove, promote, myGame.currentPlayer.color)
                     myGame.pawnPromotion = false;
@@ -503,7 +503,7 @@ var Game = function(players) {
                 }
                 $('.path').removeClass('path');
                 $('#board-placement').empty();
-                myGame.board.boardHTML();
+                myGame.board.draw.boardHTML();
                 myGame.nextTurn();
               }
             });
