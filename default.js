@@ -71,6 +71,29 @@ var DrawHTML = function() {
       myGame.movePiece(theEvent.target);
     }
   });
+  document.body.addEventListener('click', function(theEvent) {
+    if (theEvent.target.getAttribute('queen-castle')) {
+      myGame.queenSide(myGame.currentPlayer.color);
+    }
+  });
+  document.body.addEventListener('click', function(theEvent) {
+    if (theEvent.target.getAttribute('king-castle')) {
+      myGame.kingSide(myGame.currentPlayer.color);
+    }
+  });
+  document.body.addEventListener('click', function(theEvent) {
+    if (theEvent.target.getAttribute('data-unselect')) {
+      $('.path').removeClass('path');
+      myGame.currentPiece = {};
+      myGame.moveSet = {};
+      myGame.state = 'selecting';
+    }
+  });
+  document.body.addEventListener('click', function(theEvent) {
+    if (theEvent.target.getAttribute('undo-move')) {
+      myGame.undoMove();
+    }
+  });
 }
 var Board = function() {
   this.squares = [];
@@ -406,30 +429,6 @@ var Game = function(players) {
     });
     self.nextTurn();
   }
-
-  document.body.addEventListener('click', function(theEvent) {
-    if (theEvent.target.getAttribute('queen-castle')) {
-      self.queenSide(self.currentPlayer.color);
-    }
-  });
-  document.body.addEventListener('click', function(theEvent) {
-    if (theEvent.target.getAttribute('king-castle')) {
-      self.kingSide(self.currentPlayer.color);
-    }
-  });
-  document.body.addEventListener('click', function(theEvent) {
-    if (theEvent.target.getAttribute('data-unselect')) {
-      $('.path').removeClass('path');
-      self.currentPiece = {};
-      self.moveSet = {};
-      self.state = 'selecting';
-    }
-  });
-  document.body.addEventListener('click', function(theEvent) {
-    if (theEvent.target.getAttribute('undo-move')) {
-      self.undoMove();
-    }
-  });
 
   this.movePiece = function(click) {
     var moveChoices;
