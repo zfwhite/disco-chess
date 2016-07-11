@@ -68,17 +68,30 @@ var DrawHTML = function() {
 
   document.body.addEventListener('click', function(theEvent) {
     if (myGame.movePiece !== undefined) {
-      myGame.movePiece(theEvent.target);
+      if(myGame.state == 'moving') {
+        myGame.movePiece(theEvent.target);
+        $('#board-placement').empty();
+        myGame.board.draw.boardHTML();
+        myGame.nextTurn();
+      } else {
+        myGame.movePiece(theEvent.target);
+      }
     }
   });
   document.body.addEventListener('click', function(theEvent) {
     if (theEvent.target.getAttribute('queen-castle')) {
       myGame.queenSide(myGame.currentPlayer.color);
+      $('#board-placement').empty();
+      myGame.board.draw.boardHTML();
+      myGame.nextTurn();
     }
   });
   document.body.addEventListener('click', function(theEvent) {
     if (theEvent.target.getAttribute('king-castle')) {
       myGame.kingSide(myGame.currentPlayer.color);
+      $('#board-placement').empty();
+      myGame.board.draw.boardHTML();
+      myGame.nextTurn();
     }
   });
   document.body.addEventListener('click', function(theEvent) {
@@ -284,9 +297,9 @@ var Game = function(players) {
          squares.piece = {};
        } if (squares.column === 7 && squares.row === 7) {
          squares.piece = {};
-         $('#board-placement').empty();
-         myGame.board.draw.boardHTML();
-         myGame.nextTurn();
+        //  $('#board-placement').empty();
+        //  myGame.board.draw.boardHTML();
+        //  myGame.nextTurn();
        }
        if (squares.column === 6 && squares.row === 7) {
         squares.piece = {piece: {color: 'white', type: 'king'}};
@@ -298,9 +311,9 @@ var Game = function(players) {
          squares.piece = {};
        } else if (squares.column === 7 && squares.row === 0) {
          squares.piece = {};
-         $('#board-placement').empty();
-         myGame.board.draw.boardHTML();
-         myGame.nextTurn();
+        //  $('#board-placement').empty();
+        //  myGame.board.draw.boardHTML();
+        //  myGame.nextTurn();
        }
        if (squares.column === 6 && squares.row === 0) {
         squares.piece = {piece: {color: 'black', type: 'king'}};
@@ -353,9 +366,9 @@ var Game = function(players) {
          squares.piece = {};
        } else if (squares.column === 4 && squares.row === 7) {
          squares.piece = {};
-         $('#board-placement').empty();
-         myGame.board.draw.boardHTML();
-         myGame.nextTurn();
+        //  $('#board-placement').empty();
+        //  myGame.board.draw.boardHTML();
+        //  myGame.nextTurn();
        }
        if (squares.column === 2 && squares.row === 7) {
         squares.piece = {piece: {color: 'white', type: 'king'}};
@@ -369,9 +382,9 @@ var Game = function(players) {
          squares.piece = {};
        } else if (squares.column === 4 && squares.row === 0) {
          squares.piece = {};
-         $('#board-placement').empty();
-         myGame.board.draw.boardHTML();
-         myGame.nextTurn();
+        //  $('#board-placement').empty();
+        //  myGame.board.draw.boardHTML();
+        //  myGame.nextTurn();
        }
        if (squares.column === 2 && squares.row === 0) {
         squares.piece = {piece: {color: 'black', type: 'king'}};
@@ -509,9 +522,9 @@ var Game = function(players) {
                   }
                 }
                 $('.path').removeClass('path');
-                $('#board-placement').empty();
-                myGame.board.draw.boardHTML();
-                myGame.nextTurn();
+                // $('#board-placement').empty();
+                // myGame.board.draw.boardHTML();
+                // myGame.nextTurn();
               }
             });
           });
