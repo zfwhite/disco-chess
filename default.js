@@ -69,7 +69,7 @@ var DrawHTML = function() {
   this.check = function(color) {
     window.alert(color + ' king is in check!');
     $('#board-placement').empty();
-    myGame.board.draw.boardHTML();
+    draw.boardHTML();
   }
 
   document.body.addEventListener('click', function(theEvent) {
@@ -79,7 +79,7 @@ var DrawHTML = function() {
         if ($(theEvent.target).hasClass('path')) {
           $('#board-placement').empty();
           $('.path').removeClass('path');
-          myGame.board.draw.boardHTML();
+          draw.boardHTML();
           myGame.nextTurn();
         }
       } else if (myGame.state == 'selecting'){
@@ -97,12 +97,12 @@ var DrawHTML = function() {
     if (theEvent.target.getAttribute('queen-castle')) {
       myGame.queenSide(myGame.currentPlayer.color);
       $('#board-placement').empty();
-      myGame.board.draw.boardHTML();
+      draw.boardHTML();
       myGame.nextTurn();
     } else if (theEvent.target.getAttribute('king-castle')) {
       myGame.kingSide(myGame.currentPlayer.color);
       $('#board-placement').empty();
-      myGame.board.draw.boardHTML();
+      draw.boardHTML();
       myGame.nextTurn();
     } else if (theEvent.target.getAttribute('data-unselect')) {
       $('.path').removeClass('path');
@@ -172,7 +172,6 @@ var Board = function() {
       }
     });
   });
-  this.draw = new DrawHTML();
 }
 var Square = function(row, column, color) {
   return {
@@ -202,8 +201,6 @@ var Game = function(players) {
 
   var self = this;
   this.start = function() {
-    // Draw the board.
-    this.board.draw.boardHTML();
     // Set the player to white for the first turn.
     players.forEach(function(player) {
       if (player.color == 'white') {
@@ -398,7 +395,7 @@ var Game = function(players) {
              if (look.piece.piece != undefined && look.piece.piece.type == 'king') {
                if (look.piece.piece.color != myGame.currentPlayer.color) {
                  myGame.undoMove();
-                 myGame.board.draw.check(look.piece.piece.color);
+                 draw.check(look.piece.piece.color);
                }
              }
            })
@@ -859,8 +856,11 @@ var MoveSets = function() {
   }
 }
 
+var draw = new DrawHTML();
+draw.boardHTML();
+
 var showGame = function() {
-  var status = myGame.board.draw.statusHTML();
+  var status = draw.statusHTML();
   var theStatus = document.getElementById('information');
   theStatus.innerHTML = "";
   theStatus.appendChild(status)
