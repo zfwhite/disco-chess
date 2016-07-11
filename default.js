@@ -46,6 +46,25 @@ var DrawHTML = function() {
       }
     }
   }
+
+  this.statusHTML = function() {
+    var status = document.createElement('div');
+    var playerName = document.createElement('div');
+    playerName.textContent = 'Player Name: ' + myGame.currentPlayer.name;
+    var playerColor = document.createElement('div');
+    playerColor.textContent = 'Player Color: ' + myGame.currentPlayer.color;
+    var state = document.createElement('div');
+    state.textContent = 'Player State: ' + myGame.state;
+    if (myGame.currentPiece.piece !== undefined) {
+      var piece = document.createElement('div');
+      piece.textContent = 'Current Piece: ' + myGame.currentPiece.piece.color + " " + myGame.currentPiece.piece.type;
+      status.appendChild(piece);
+    }
+    status.appendChild(playerName);
+    status.appendChild(playerColor);
+    status.appendChild(state)
+    return status;
+  }
 }
 var Board = function() {
   this.squares = [];
@@ -380,24 +399,6 @@ var Game = function(players) {
       myGame.board.draw.boardHTML();
     });
     self.nextTurn();
-  }
-  this.HTML = function() {
-    var status = document.createElement('div');
-    var playerName = document.createElement('div');
-    playerName.textContent = 'Player Name: ' + this.currentPlayer.name;
-    var playerColor = document.createElement('div');
-    playerColor.textContent = 'Player Color: ' + this.currentPlayer.color;
-    var state = document.createElement('div');
-    state.textContent = 'Player State: ' + this.state;
-    if (typeof this.currentPiece.piece != 'undefined') {
-      var piece = document.createElement('div');
-      piece.textContent = 'Current Piece: ' + this.currentPiece.piece.color + " " + this.currentPiece.piece.type;
-      status.appendChild(piece);
-    }
-    status.appendChild(playerName);
-    status.appendChild(playerColor);
-    status.appendChild(state)
-    return status;
   }
 
   document.body.addEventListener('click', function(theEvent) {
@@ -860,7 +861,7 @@ var MoveSets = function() {
 }
 
 var showGame = function() {
-  var status = myGame.HTML();
+  var status = myGame.board.draw.statusHTML();
   var theStatus = document.getElementById('information');
   theStatus.innerHTML = "";
   theStatus.appendChild(status)
