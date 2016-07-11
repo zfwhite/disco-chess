@@ -66,6 +66,12 @@ var DrawHTML = function() {
     return status;
   }
 
+  this.check = function(color) {
+    window.alert(color + ' king is in check!');
+    $('#board-placement').empty();
+    myGame.board.draw.boardHTML();
+  }
+
   document.body.addEventListener('click', function(theEvent) {
     if (myGame.movePiece !== undefined) {
       if(myGame.state == 'moving') {
@@ -93,27 +99,16 @@ var DrawHTML = function() {
       $('#board-placement').empty();
       myGame.board.draw.boardHTML();
       myGame.nextTurn();
-    }
-  });
-  document.body.addEventListener('click', function(theEvent) {
-    if (theEvent.target.getAttribute('king-castle')) {
+    } else if (theEvent.target.getAttribute('king-castle')) {
       myGame.kingSide(myGame.currentPlayer.color);
       $('#board-placement').empty();
       myGame.board.draw.boardHTML();
       myGame.nextTurn();
-    }
-  });
-  document.body.addEventListener('click', function(theEvent) {
-    if (theEvent.target.getAttribute('data-unselect')) {
+    } else if (theEvent.target.getAttribute('data-unselect')) {
       $('.path').removeClass('path');
       myGame.currentPiece = {};
       myGame.moveSet = {};
       myGame.state = 'selecting';
-    }
-  });
-  document.body.addEventListener('click', function(theEvent) {
-    if (theEvent.target.getAttribute('undo-move')) {
-      myGame.undoMove();
     }
   });
 }
@@ -402,8 +397,8 @@ var Game = function(players) {
            move.forEach(function(look) {
              if (look.piece.piece != undefined && look.piece.piece.type == 'king') {
                if (look.piece.piece.color != myGame.currentPlayer.color) {
-                 window.alert(look.piece.piece.color + ' ' + look.piece.piece.type + ' is in check!');
                  myGame.undoMove();
+                 myGame.board.draw.check(look.piece.piece.color);
                }
              }
            })
@@ -434,8 +429,6 @@ var Game = function(players) {
       } else if (square.column == self.lastMove.column && square.row == self.lastMove.row) {
         square.piece.piece = self.lastMove.piece;
       }
-      $('#board-placement').empty();
-      myGame.board.draw.boardHTML();
     });
     self.nextTurn();
   }
