@@ -65,6 +65,12 @@ var DrawHTML = function() {
     status.appendChild(state)
     return status;
   }
+
+  document.body.addEventListener('click', function(theEvent) {
+    if (myGame.movePiece !== undefined) {
+      myGame.movePiece(theEvent.target);
+    }
+  });
 }
 var Board = function() {
   this.squares = [];
@@ -424,7 +430,8 @@ var Game = function(players) {
       self.undoMove();
     }
   });
-  document.body.addEventListener('click', function(theEvent) {
+
+  this.movePiece = function(click) {
     var moveChoices;
     if (myGame.state == 'selecting') {
       if (myGame.currentPlayer.color === 'white') {
@@ -440,7 +447,7 @@ var Game = function(players) {
           myGame.castleCheck(self.currentPlayer.color);
         }
       }
-      var coordinate = theEvent.target.getAttribute('id').split(',');
+      var coordinate = click.getAttribute('id').split(',');
       var row = coordinate[0];
       var column = coordinate[1];
       myGame.board.squares.forEach(function(square) {
@@ -459,7 +466,7 @@ var Game = function(players) {
         }
       });
     } else if (myGame.state == 'moving') {
-      var coordinateMove = theEvent.target.getAttribute('id').split(',');
+      var coordinateMove = click.getAttribute('id').split(',');
       var rowMove = coordinateMove[0];
       var columnMove = coordinateMove[1];
       var remove = self.lastLocation.split(',');
@@ -512,7 +519,7 @@ var Game = function(players) {
         }
       });
     }
-  });
+  }
 }
 
 var Player = function(name, color) {
