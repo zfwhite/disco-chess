@@ -80,7 +80,6 @@ var DrawHTML = function() {
           $('#board-placement').empty();
           $('.path').removeClass('path');
           draw.boardHTML();
-          myGame.nextTurn();
         }
       } else if (myGame.state == 'selecting'){
         myGame.movePiece(theEvent.target);
@@ -98,12 +97,10 @@ var DrawHTML = function() {
       myGame.queenSide(myGame.currentPlayer.color);
       $('#board-placement').empty();
       draw.boardHTML();
-      myGame.nextTurn();
     } else if (theEvent.target.getAttribute('king-castle')) {
       myGame.kingSide(myGame.currentPlayer.color);
       $('#board-placement').empty();
       draw.boardHTML();
-      myGame.nextTurn();
     } else if (theEvent.target.getAttribute('data-unselect')) {
       $('.path').removeClass('path');
       myGame.currentPiece = {};
@@ -298,6 +295,7 @@ var Game = function(players) {
          squares.piece = {};
        } if (squares.column === 7 && squares.row === 7) {
          squares.piece = {};
+         myGame.nextTurn();
        }
        if (squares.column === 6 && squares.row === 7) {
         squares.piece = {piece: {color: 'white', type: 'king'}};
@@ -309,6 +307,7 @@ var Game = function(players) {
          squares.piece = {};
        } else if (squares.column === 7 && squares.row === 0) {
          squares.piece = {};
+         myGame.nextTurn();
        }
        if (squares.column === 6 && squares.row === 0) {
         squares.piece = {piece: {color: 'black', type: 'king'}};
@@ -361,6 +360,7 @@ var Game = function(players) {
          squares.piece = {};
        } else if (squares.column === 4 && squares.row === 7) {
          squares.piece = {};
+         myGame.nextTurn();
        }
        if (squares.column === 2 && squares.row === 7) {
         squares.piece = {piece: {color: 'white', type: 'king'}};
@@ -374,6 +374,7 @@ var Game = function(players) {
          squares.piece = {};
        } else if (squares.column === 4 && squares.row === 0) {
          squares.piece = {};
+         myGame.nextTurn();
        }
        if (squares.column === 2 && squares.row === 0) {
         squares.piece = {piece: {color: 'black', type: 'king'}};
@@ -493,7 +494,7 @@ var Game = function(players) {
                 //Promote pawn
                 myGame.checkPromotion(square.row, legal.piece.piece.color, legal.piece.piece.type);
                 if (myGame.pawnPromotion === true) {
-                  var promote = myGame.board.draw.promotePawn();
+                  var promote = draw.promotePawn();
                   if (promote === 'queen' || promote === 'knight') {
                     myGame.givePromotion(coordinateMove, promote, myGame.currentPlayer.color)
                     myGame.pawnPromotion = false;
@@ -502,6 +503,7 @@ var Game = function(players) {
                     myGame.pawnPromotion = false;
                   }
                 }
+                myGame.nextTurn();
               }
             });
           });
