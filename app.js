@@ -4,9 +4,10 @@ var jsonParser = require('body-parser').json();
 var myGame = require('./content');
 
 app.use(jsonParser);
+app.use(express.static(__dirname + '/public'));
 
 app.get('/', function(req, res) {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile('/index.html');
 });
 
 app.post('/unselect', function(req, res) {
@@ -41,11 +42,11 @@ app.get('/king', function(req, res) {
 });
 
 app.get('/default.js', function(req, res) {
-  res.sendFile(__dirname + '/default.js');
+  res.sendFile('/public/default.js');
 });
 
 app.get('/default.css', function(req, res) {
-  res.sendFile(__dirname + '/default.css');
+  res.sendFile('/default.css');
 });
 
 app.listen(process.env.PORT || 3000);
