@@ -5,6 +5,10 @@ var myGame = require('./content');
 
 app.use(jsonParser);
 
+app.get('/', function(req, res) {
+  res.sendFile(__dirname + '/index.html');
+});
+
 app.post('/draw', function(req, res) {
   res.send(myGame);
 });
@@ -27,10 +31,6 @@ app.get('/queen', function(req, res) {
 app.get('/king', function(req, res) {
   myGame.kingSide(myGame.currentPlayer.color);
   res.send(myGame);
-});
-
-app.get('/', function(req, res) {
-  res.sendFile(__dirname + '/index.html');
 });
 
 app.get('/default.js', function(req, res) {
