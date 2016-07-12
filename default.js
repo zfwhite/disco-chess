@@ -133,13 +133,25 @@ var DrawHTML = function() {
   // Castling and unselecting button event listeners.
   document.body.addEventListener('click', function(theEvent) {
     if (theEvent.target.getAttribute('queen-castle')) {
-      myGame.queenSide(myGame.currentPlayer.color);
-      $('#board-placement').empty();
-      draw.boardHTML();
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/queen', true);
+      xhr.send();
+
+      xhr.addEventListener('load', function() {
+        myGame = JSON.parse(xhr.response);
+        $('#board-placement').empty();
+        draw.boardHTML();
+      });
     } else if (theEvent.target.getAttribute('king-castle')) {
-      myGame.kingSide(myGame.currentPlayer.color);
-      $('#board-placement').empty();
-      draw.boardHTML();
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/king', true);
+      xhr.send();
+
+      xhr.addEventListener('load', function() {
+        myGame = JSON.parse(xhr.response);
+        $('#board-placement').empty();
+        draw.boardHTML();
+      });
     } else if (theEvent.target.getAttribute('data-unselect')) {
       $('.path').removeClass('path');
       myGame.currentPiece = {};

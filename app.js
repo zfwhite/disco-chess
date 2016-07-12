@@ -19,6 +19,16 @@ app.post('/moving', function(req, res) {
   res.send(myGame);
 });
 
+app.get('/queen', function(req, res) {
+  myGame.queenSide(myGame.currentPlayer.color);
+  res.send(myGame);
+});
+
+app.get('/king', function(req, res) {
+  myGame.kingSide(myGame.currentPlayer.color);
+  res.send(myGame);
+});
+
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
 });
