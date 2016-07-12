@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var jsonParser = require('body-parser').json();
 
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
