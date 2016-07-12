@@ -13,6 +13,8 @@ var sprite = {
   blackpawn: '&#9823;'
 };
 var DrawHTML = function() {
+  var self = this;
+
   this.promotePawn = function () {
     if (myGame.pawnPromotion === true) {
       var promotion = prompt('Enter "queen" or "knight" to be promoted.');
@@ -80,6 +82,9 @@ var DrawHTML = function() {
           $('#board-placement').empty();
           $('.path').removeClass('path');
           draw.boardHTML();
+          if (myGame.kingCheck === true) {
+            self.check(myGame.currentPlayer.color);
+          }
         }
       } else if (myGame.state == 'selecting'){
         myGame.movePiece(theEvent.target);
@@ -385,8 +390,11 @@ var Game = function(players) {
    }
  }
 
+ this.kingCheck = false;
+
 // Checks if a player has been put in check.
   this.inCheck = function() {
+    self.kingCheck = false;
      // Run all possible moves for all opponents pieces, checking for king location.
      myGame.board.squares.forEach(function(square) {
        if (square.piece.piece != undefined) {
@@ -396,13 +404,13 @@ var Game = function(players) {
              if (look.piece.piece != undefined && look.piece.piece.type == 'king') {
                if (look.piece.piece.color != myGame.currentPlayer.color) {
                  myGame.undoMove();
-                 draw.check(look.piece.piece.color);
+                 self.kingCheck = true;
                }
              }
-           })
+           });
          });
        }
-     })
+     });
    }
 
    this.nextTurn = function() {
