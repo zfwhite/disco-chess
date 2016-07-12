@@ -15,7 +15,6 @@ app.post('/selecting', function(req, res) {
 });
 
 app.post('/moving', function(req, res) {
-  console.log(req.body.id);
   myGame.movePiece(req.body.id);
   res.send(myGame);
 });

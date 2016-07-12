@@ -97,14 +97,14 @@ var DrawHTML = function() {
 
         xhr.addEventListener('load', function() {
           myGame = JSON.parse(xhr.response);
-          console.log(myGame);
 
           if ($(theEvent.target).hasClass('path')) {
-            $('#board-placement').empty();
             $('.path').removeClass('path');
-            draw.boardHTML();
             if (myGame.kingCheck === true) {
               self.check(myGame.currentPlayer.color);
+            } else {
+              $('#board-placement').empty();
+              draw.boardHTML();
             }
           }
         });
