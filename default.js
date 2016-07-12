@@ -153,10 +153,15 @@ var DrawHTML = function() {
         draw.boardHTML();
       });
     } else if (theEvent.target.getAttribute('data-unselect')) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/unselect', true);
+      xhr.setRequestHeader('Content-type', 'application/json');
+      xhr.send(null);
+
+      xhr.addEventListener('load', function() {
+        myGame = JSON.parse(xhr.response);
+      });
       $('.path').removeClass('path');
-      myGame.currentPiece = {};
-      myGame.moveSet = {};
-      myGame.state = 'selecting';
     }
   });
 }

@@ -9,6 +9,13 @@ app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 
+app.post('/unselect', function(req, res) {
+  myGame.currentPiece = {};
+  myGame.moveSet = {};
+  myGame.state = 'selecting';
+  res.send(myGame);
+});
+
 app.post('/draw', function(req, res) {
   res.send(myGame);
 });
