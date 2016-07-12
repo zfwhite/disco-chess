@@ -87,15 +87,27 @@ var DrawHTML = function() {
   document.body.addEventListener('click', function(theEvent) {
     // if (myGame.movePiece !== undefined) {
       if(myGame.state == 'moving') {
-        myGame.movePiece(theEvent.target);
-        if ($(theEvent.target).hasClass('path')) {
-          $('#board-placement').empty();
-          $('.path').removeClass('path');
-          draw.boardHTML();
-          if (myGame.kingCheck === true) {
-            self.check(myGame.currentPlayer.color);
+        var coordinates = theEvent.target.id.split(',');
+        var id = parseInt(coordinates[0]) + ',' + parseInt(coordinates[1]);
+        var test = 'test';
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/moving', true);
+        xhr.setRequestHeader('Content-type', 'application/json');
+        xhr.send(JSON.stringify({id}));
+
+        xhr.addEventListener('load', function() {
+          myGame = JSON.parse(xhr.response);
+          console.log(myGame);
+
+          if ($(theEvent.target).hasClass('path')) {
+            $('#board-placement').empty();
+            $('.path').removeClass('path');
+            draw.boardHTML();
+            if (myGame.kingCheck === true) {
+              self.check(myGame.currentPlayer.color);
+            }
           }
-        }
+        });
       } else if (myGame.state == 'selecting'){
         var coordinates = theEvent.target.id.split(',');
         var id = parseInt(coordinates[0]) + ',' + parseInt(coordinates[1]);
@@ -107,7 +119,6 @@ var DrawHTML = function() {
 
         xhr.addEventListener('load', function() {
           myGame = JSON.parse(xhr.response);
-          console.log(myGame.moveSet);
 
           myGame.moveSet.forEach(function(spot) {
             spot.forEach(function(move) {
@@ -115,13 +126,6 @@ var DrawHTML = function() {
               change.classList.add('path');
             })
           })
-
-          // for (const placed of myGame.moveSet) {
-          //   for (const move of placed) {
-          //     var change = document.getElementById(move.row.toString() + ',' + move.column.toString());
-          //     change.classList.add('path');
-          //   }
-          // }
         })
       }
     // }

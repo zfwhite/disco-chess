@@ -352,7 +352,7 @@ var Game = function(players) {
         }
       });
     } else if (myGame.state == 'moving') {
-      var coordinateMove = click.getAttribute('id').split(',');
+      var coordinateMove = click.split(',');
       var rowMove = coordinateMove[0];
       var columnMove = coordinateMove[1];
       var remove = self.lastLocation.split(',');

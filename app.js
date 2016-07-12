@@ -10,6 +10,11 @@ app.post('/draw', function(req, res) {
 });
 
 app.post('/selecting', function(req, res) {
+  myGame.movePiece(req.body.id);
+  res.send(myGame);
+});
+
+app.post('/moving', function(req, res) {
   console.log(req.body.id);
   myGame.movePiece(req.body.id);
   res.send(myGame);
