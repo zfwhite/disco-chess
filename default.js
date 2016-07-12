@@ -500,17 +500,17 @@ var Game = function(players) {
                   }
                 });
                 //Promote pawn
-                myGame.checkPromotion(square.row, legal.piece.piece.color, legal.piece.piece.type);
-                if (myGame.pawnPromotion === true) {
-                  var promote = draw.promotePawn();
-                  if (promote === 'queen' || promote === 'knight') {
-                    myGame.givePromotion(coordinateMove, promote, myGame.currentPlayer.color)
-                    myGame.pawnPromotion = false;
-                  } else {
-                    myGame.givePromotion(coordinateMove, 'queen', myGame.currentPlayer.color)
-                    myGame.pawnPromotion = false;
-                  }
-                }
+                // myGame.checkPromotion(square.row, legal.piece.piece.color, legal.piece.piece.type);
+                // if (myGame.pawnPromotion === true) {
+                //   var promote = draw.promotePawn();
+                //   if (promote === 'queen' || promote === 'knight') {
+                //     myGame.givePromotion(coordinateMove, promote, myGame.currentPlayer.color)
+                //     myGame.pawnPromotion = false;
+                //   } else {
+                //     myGame.givePromotion(coordinateMove, 'queen', myGame.currentPlayer.color)
+                //     myGame.pawnPromotion = false;
+                //   }
+                // }
                 myGame.nextTurn();
               }
             });
