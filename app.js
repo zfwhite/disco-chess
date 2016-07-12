@@ -42,7 +42,7 @@ app.get('/king', function(req, res) {
 });
 
 app.get('/default.js', function(req, res) {
-  res.sendFile('/public/default.js');
+  res.sendFile('/default.js');
 });
 
 app.get('/default.css', function(req, res) {
