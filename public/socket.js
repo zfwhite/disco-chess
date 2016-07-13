@@ -8,4 +8,10 @@ $('form').submit(function() {
 
 socket.on('chat message', function(msg) {
   $('#messages').append($('<li>').text(msg));
+  updateScroll();
 });
+
+function updateScroll() {
+  var chat = document.getElementById('messages');
+  chat.scrollTop = chat.scrollHeight;
+}
