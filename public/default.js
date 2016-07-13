@@ -161,8 +161,7 @@ var DrawHTML = function() {
 
       xhr.addEventListener('load', function() {
         myGame = JSON.parse(xhr.response);
-        $('#board-placement').empty();
-        draw.boardHTML();
+        socket.emit('moved', myGame);
       });
     } else if (theEvent.target.getAttribute('king-castle')) {
       var xhr = new XMLHttpRequest();
@@ -171,8 +170,7 @@ var DrawHTML = function() {
 
       xhr.addEventListener('load', function() {
         myGame = JSON.parse(xhr.response);
-        $('#board-placement').empty();
-        draw.boardHTML();
+        socket.emit('moved', myGame);
       });
     } else if (theEvent.target.getAttribute('data-unselect')) {
       var xhr = new XMLHttpRequest();
@@ -191,8 +189,7 @@ var DrawHTML = function() {
 
       xhr.addEventListener('load', function() {
         myGame = JSON.parse(xhr.response);
-        $('#board-placement').empty();
-        draw.boardHTML();
+        socket.emit('moved', myGame);
       });
     }
   });
