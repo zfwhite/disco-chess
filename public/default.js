@@ -11,6 +11,11 @@ socket.on('chat message', function(msg) {
   updateScroll();
 });
 
+socket.on('moved', function(id) {
+  $('#board-placement').empty();
+  draw.boardHTML();
+});
+
 function updateScroll() {
   var chat = document.getElementById('messages');
   chat.scrollTop = chat.scrollHeight;
@@ -121,8 +126,7 @@ var DrawHTML = function() {
             if (myGame.kingCheck === true) {
               self.check(myGame.currentPlayer.color);
             } else {
-              $('#board-placement').empty();
-              draw.boardHTML();
+              socket.emit('moved', myGame);
             }
           }
         });
