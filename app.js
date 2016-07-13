@@ -29,6 +29,11 @@ app.post('/moving', function(req, res) {
   res.send(myGame);
 });
 
+app.get('/reset', function(req, res) {
+  myGame.reset();
+  res.send(myGame);
+});
+
 app.get('/queen', function(req, res) {
   myGame.queenSide(myGame.currentPlayer.color);
   res.send(myGame);

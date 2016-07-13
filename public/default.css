@@ -13,18 +13,17 @@ button {
   margin: 0 auto;
 }
 .col-xs-1 {
+  font-size: 50px;
   min-height: 80px;
   width: : 80px;
 }
 .light {
   background-color: white;
-  font-size: 50px;
   border: thin solid grey;
   border-radius: 1px;
 }
 .dark {
   background-color: #0093D1;
-  font-size: 50px;
   border-radius: 1px;
 }
 .path {
@@ -37,7 +36,7 @@ button {
   border-right: none;
 }
 #wrapper {
-  padding-left: 70px;
+  padding-left: 30px;
   transition: all 0.4s ease 0s;
 }
 #sidebar-wrapper {
@@ -48,7 +47,7 @@ button {
   width: 220px;
   background: #0093D1;
   position: fixed;
-  height: 500px;
+  height: 520px;
   overflow-y: auto;
   z-index: 0;
   border-radius: 6px;

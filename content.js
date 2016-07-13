@@ -72,6 +72,7 @@ var Piece = function(type, color) {
   this.color = color
 }
 var Game = function(players) {
+  var self = this;
   this.board = new Board();
   this.players = players;
   this.currentPlayer = {};
@@ -83,9 +84,30 @@ var Game = function(players) {
   this.removedPiece = {};
   this.lastMove = {};
 
+
   this.pawnPromotion = false;
 
-  var self = this;
+  this.reset = function() {
+    self.board = new Board();
+    self.players = players;
+    self.currentPlayer = {};
+    self.currentPiece = {};
+    self.moveSet = {};
+    self.state = '';
+    self.lastLocation = '';
+
+    self.removedPiece = {};
+    self.lastMove = {};
+
+    self.pawnPromotion = false;
+
+    white.kingCastle = true;
+    white.queenCastle = true;
+    black.kingCastle = true;
+    black.queenCastle = true
+
+    self.start();
+  }
   this.start = function() {
     // Set the player to white for the first turn.
     players.forEach(function(player) {
@@ -415,8 +437,6 @@ var Player = function(name, color) {
 var white = new Player('Player 1', 'white');
 var black = new Player('Player 2', 'black');
 var myGame = new Game([white, black]);
-
-
 
 myGame.start();
 

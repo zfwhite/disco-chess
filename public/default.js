@@ -180,6 +180,16 @@ var DrawHTML = function() {
         myGame = JSON.parse(xhr.response);
       });
       $('.path').removeClass('path');
+    } else if (theEvent.target.getAttribute('reset')) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/reset', true);
+      xhr.send(null);
+
+      xhr.addEventListener('load', function() {
+        myGame = JSON.parse(xhr.response);
+        $('#board-placement').empty();
+        draw.boardHTML();
+      });
     }
   });
 }
