@@ -1,5 +1,7 @@
 var express = require('express');
 var app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 var jsonParser = require('body-parser').json();
 var myGame = require('./content');
 
@@ -41,12 +43,20 @@ app.get('/king', function(req, res) {
   res.send(myGame);
 });
 
+app.get('/socket.js', function(req, res) {
+  res.sendFile('/socket.js');
+});
 app.get('/default.js', function(req, res) {
   res.sendFile('/default.js');
 });
-
 app.get('/default.css', function(req, res) {
   res.sendFile('/default.css');
 });
 
-app.listen(process.env.PORT || 3000);
+io.on('connection', function(socket) {
+  socket.on('chat message', function(msg) {
+    io.emit('chat message', msg);
+  });
+});
+
+http.listen(process.env.PORT || 3000);

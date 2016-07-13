@@ -37,10 +37,9 @@ button {
   border-right: none;
 }
 #wrapper {
-  padding-left: 100px;
+  padding-left: 70px;
   transition: all 0.4s ease 0s;
 }
-
 #sidebar-wrapper {
   padding: 20px;
   margin-top: 40px;
@@ -49,11 +48,44 @@ button {
   width: 220px;
   background: #0093D1;
   position: fixed;
-  height: 400px;
+  height: 500px;
   overflow-y: auto;
   z-index: 0;
   border-radius: 6px;
   transition: all 0.4s ease 0s;
+}
+form {
+  background: #0093D1;
+  padding: 3px;
+  position: relative;
+  bottom: 0;
+  width: 180px;
+}
+form input {
+  margin-top: 20px;
+  border: 1px solid black;
+  border-radius: 8px;
+  padding: 8px;
+  width: 180px;
+}
+form button {
+  width: 60px;
+  background: rgb(130, 224, 255);
+  border: none;
+  padding: 2px;
+ }
+#messages {
+  max-height: 100px;
+  overflow-y: scroll;
+  list-style-type: none;
+  margin-top: 10px;
+  padding: 0;
+}
+#messages li {
+  padding: 5px 10px;
+}
+#messages li:nth-child(odd) {
+  background: #eee;
 }
 
 #page-content-wrapper {
