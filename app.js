@@ -8,10 +8,6 @@ var myGame = require('./content');
 app.use(jsonParser);
 app.use(express.static(__dirname + '/public'));
 
-app.get('/', function(req, res) {
-  res.sendFile('/index.html');
-});
-
 app.post('/unselect', function(req, res) {
   myGame.currentPiece = {};
   myGame.moveSet = {};
@@ -41,16 +37,6 @@ app.get('/queen', function(req, res) {
 app.get('/king', function(req, res) {
   myGame.kingSide(myGame.currentPlayer.color);
   res.send(myGame);
-});
-
-app.get('/socket.js', function(req, res) {
-  res.sendFile('/socket.js');
-});
-app.get('/default.js', function(req, res) {
-  res.sendFile('/default.js');
-});
-app.get('/default.css', function(req, res) {
-  res.sendFile('/default.css');
 });
 
 io.on('connection', function(socket) {
