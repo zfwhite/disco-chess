@@ -11,7 +11,7 @@ socket.on('chat message', function(msg) {
   updateScroll();
 });
 
-socket.on('moved', function(id) {
+socket.on('moved', function() {
   $('#board-placement').empty();
   draw.boardHTML();
 });
@@ -126,7 +126,7 @@ var DrawHTML = function() {
             if (myGame.kingCheck === true) {
               self.check(myGame.currentPlayer.color);
             } else {
-              socket.emit('moved', myGame);
+              socket.emit('moved');
             }
           }
         });
@@ -161,7 +161,7 @@ var DrawHTML = function() {
 
       xhr.addEventListener('load', function() {
         myGame = JSON.parse(xhr.response);
-        socket.emit('moved', myGame);
+        socket.emit('moved');
       });
     } else if (theEvent.target.getAttribute('king-castle')) {
       var xhr = new XMLHttpRequest();
@@ -170,7 +170,7 @@ var DrawHTML = function() {
 
       xhr.addEventListener('load', function() {
         myGame = JSON.parse(xhr.response);
-        socket.emit('moved', myGame);
+        socket.emit('moved');
       });
     } else if (theEvent.target.getAttribute('data-unselect')) {
       var xhr = new XMLHttpRequest();
@@ -189,7 +189,7 @@ var DrawHTML = function() {
 
       xhr.addEventListener('load', function() {
         myGame = JSON.parse(xhr.response);
-        socket.emit('moved', myGame);
+        socket.emit('moved');
       });
     }
   });
