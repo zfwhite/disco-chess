@@ -108,18 +108,16 @@ var DrawHTML = function() {
 
   // Piece selection and movement event listeners.
   $(document.body).on('click', function(theEvent) {
+    var coordinates = theEvent.target.id.split(',');
+    var id = parseInt(coordinates[0]) + ',' + parseInt(coordinates[1]);
+    var request = $.ajax({
+      url: '/moving',
+      method: 'POST',
+      contentType: 'application/json',
+      dataType: 'json',
+      data: JSON.stringify({id})
+    });
     if(myGame.state == 'moving') {
-      var coordinates = theEvent.target.id.split(',');
-      var id = parseInt(coordinates[0]) + ',' + parseInt(coordinates[1]);
-      var test = 'test';
-
-      var request = $.ajax({
-        url: '/moving',
-        method: 'POST',
-        contentType: 'application/json',
-        dataType: 'json',
-        data: JSON.stringify({id})
-      });
       request.done(function(msg) {
         myGame = msg;
         if ($(theEvent.target).hasClass('path')) {
@@ -132,24 +130,15 @@ var DrawHTML = function() {
         }
       });
     } else if (myGame.state == 'selecting'){
-      var coordinates = theEvent.target.id.split(',');
-      var id = parseInt(coordinates[0]) + ',' + parseInt(coordinates[1]);
-      var test = 'test';
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', '/selecting', true);
-      xhr.setRequestHeader('Content-type', 'application/json');
-      xhr.send(JSON.stringify({id}));
-
-      xhr.addEventListener('load', function() {
-        myGame = JSON.parse(xhr.response);
-
+      request.done(function(msg) {
+        myGame = msg;
         myGame.moveSet.forEach(function(spot) {
           spot.forEach(function(move) {
             var change = document.getElementById(move.row.toString() + ',' + move.column.toString());
             change.classList.add('path');
-          })
-        })
-      })
+          });
+        });
+      });
     }
   });
   // Castling and unselecting button event listeners.
