@@ -107,53 +107,53 @@ var DrawHTML = function() {
   }
 
   // Piece selection and movement event listeners.
-  document.body.addEventListener('click', function(theEvent) {
-    // if (myGame.movePiece !== undefined) {
-      if(myGame.state == 'moving') {
-        var coordinates = theEvent.target.id.split(',');
-        var id = parseInt(coordinates[0]) + ',' + parseInt(coordinates[1]);
-        var test = 'test';
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/moving', true);
-        xhr.setRequestHeader('Content-type', 'application/json');
-        xhr.send(JSON.stringify({id}));
+  $(document.body).on('click', function(theEvent) {
+    if(myGame.state == 'moving') {
+      var coordinates = theEvent.target.id.split(',');
+      var id = parseInt(coordinates[0]) + ',' + parseInt(coordinates[1]);
+      var test = 'test';
 
-        xhr.addEventListener('load', function() {
-          myGame = JSON.parse(xhr.response);
-
-          if ($(theEvent.target).hasClass('path')) {
-            $('.path').removeClass('path');
-            if (myGame.kingCheck === true) {
-              self.check(myGame.currentPlayer.color);
-            } else {
-              socket.emit('moved');
-            }
+      var request = $.ajax({
+        url: '/moving',
+        method: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({id})
+      });
+      request.done(function(msg) {
+        myGame = msg;
+        if ($(theEvent.target).hasClass('path')) {
+          $('.path').removeClass('path');
+          if (myGame.kingCheck === true) {
+            self.check(myGame.currentPlayer.color);
+          } else {
+            socket.emit('moved');
           }
-        });
-      } else if (myGame.state == 'selecting'){
-        var coordinates = theEvent.target.id.split(',');
-        var id = parseInt(coordinates[0]) + ',' + parseInt(coordinates[1]);
-        var test = 'test';
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/selecting', true);
-        xhr.setRequestHeader('Content-type', 'application/json');
-        xhr.send(JSON.stringify({id}));
+        }
+      });
+    } else if (myGame.state == 'selecting'){
+      var coordinates = theEvent.target.id.split(',');
+      var id = parseInt(coordinates[0]) + ',' + parseInt(coordinates[1]);
+      var test = 'test';
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/selecting', true);
+      xhr.setRequestHeader('Content-type', 'application/json');
+      xhr.send(JSON.stringify({id}));
 
-        xhr.addEventListener('load', function() {
-          myGame = JSON.parse(xhr.response);
+      xhr.addEventListener('load', function() {
+        myGame = JSON.parse(xhr.response);
 
-          myGame.moveSet.forEach(function(spot) {
-            spot.forEach(function(move) {
-              var change = document.getElementById(move.row.toString() + ',' + move.column.toString());
-              change.classList.add('path');
-            })
+        myGame.moveSet.forEach(function(spot) {
+          spot.forEach(function(move) {
+            var change = document.getElementById(move.row.toString() + ',' + move.column.toString());
+            change.classList.add('path');
           })
         })
-      }
-    // }
+      })
+    }
   });
   // Castling and unselecting button event listeners.
-  document.body.addEventListener('click', function(theEvent) {
+  $(document.body).on('click', function(theEvent) {
     if (theEvent.target.getAttribute('queen-castle')) {
       var xhr = new XMLHttpRequest();
       xhr.open('GET', '/queen', true);
