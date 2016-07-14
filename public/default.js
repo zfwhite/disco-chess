@@ -46,13 +46,13 @@ var DrawHTML = function() {
     }
   }
   this.boardHTML = function() {
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/draw');
-    xhr.setRequestHeader('Content-type', 'application/json');
-    xhr.send();
-
-    xhr.addEventListener('load', function() {
-      myGame = JSON.parse(xhr.response);
+    var request = $.ajax({
+      url: '/draw',
+      method: 'GET',
+      contentType: 'application/json',
+      dataType: 'json'
+    }).done(function(msg) {
+      myGame = msg;
       for (var row = 0; row <= 7; row++) {
         var theRow = document.createElement('div');
         theRow.classList.add('row');
@@ -144,40 +144,40 @@ var DrawHTML = function() {
   // Castling and unselecting button event listeners.
   $(document.body).on('click', function(theEvent) {
     if (theEvent.target.getAttribute('queen-castle')) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', '/queen', true);
-      xhr.send();
-
-      xhr.addEventListener('load', function() {
-        myGame = JSON.parse(xhr.response);
+      var request = $.ajax({
+        method: 'GET',
+        url: '/queen',
+        dataType: 'json'
+      }).done(function(msg) {
+        myGame = msg;
         socket.emit('moved');
       });
     } else if (theEvent.target.getAttribute('king-castle')) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', '/king', true);
-      xhr.send();
-
-      xhr.addEventListener('load', function() {
-        myGame = JSON.parse(xhr.response);
+      var request = $.ajax({
+        method: 'GET',
+        url: '/king',
+        dataType: 'json'
+      }).done(function(msg) {
+        myGame = msg;
         socket.emit('moved');
       });
     } else if (theEvent.target.getAttribute('data-unselect')) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', '/unselect', true);
-      xhr.setRequestHeader('Content-type', 'application/json');
-      xhr.send(null);
-
-      xhr.addEventListener('load', function() {
-        myGame = JSON.parse(xhr.response);
+      var request = $.ajax({
+        method: 'GET',
+        url: '/unselect',
+        dataType: 'json'
+      }).done(function(msg) {
+        myGame = msg;
+        socket.emit('moved');
       });
       $('.path').removeClass('path');
     } else if (theEvent.target.getAttribute('reset')) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', '/reset', true);
-      xhr.send(null);
-
-      xhr.addEventListener('load', function() {
-        myGame = JSON.parse(xhr.response);
+      var request = $.ajax({
+        method: 'GET',
+        url: '/reset',
+        dataType: 'json'
+      }).done(function(msg) {
+        myGame = msg;
         socket.emit('moved');
       });
     }
@@ -190,8 +190,6 @@ draw.boardHTML();
 // Shows information about the game.
 var showGame = function() {
   var status = draw.statusHTML();
-  var theStatus = document.getElementById('information');
-  theStatus.innerHTML = "";
-  theStatus.appendChild(status)
+  $('#information').html('').append(status);
 }
 setInterval(showGame, 1000);

@@ -8,14 +8,14 @@ var myGame = require('./content');
 app.use(jsonParser);
 app.use(express.static(__dirname + '/public'));
 
-app.post('/unselect', function(req, res) {
+app.get('/unselect', function(req, res) {
   myGame.currentPiece = {};
   myGame.moveSet = {};
   myGame.state = 'selecting';
   res.send(myGame);
 });
 
-app.post('/draw', function(req, res) {
+app.get('/draw', function(req, res) {
   res.send(myGame);
 });
 
