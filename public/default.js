@@ -1,5 +1,6 @@
 var socket = io();
 
+// Chat feature.
 $('form').submit(function() {
   socket.emit('chat message', $('#typed').val());
   $('#typed').val('');
@@ -55,24 +56,24 @@ var DrawHTML = function() {
       myGame = msg;
       for (var row = 0; row <= 7; row++) {
         var theRow = document.createElement('div');
-        theRow.classList.add('row');
+        $(theRow).addClass('row');
         for (var column = 0; column <= 7; column++) {
           myGame.board.squares.forEach(function(square) {
             if (square.row == row && square.column == column) {
               var theSquare = document.createElement('div');
-              theSquare.classList.add('col-xs-1');
-              theSquare.classList.add(square.color);
+              $(theSquare).addClass('col-xs-1');
+              $(theSquare).addClass(square.color);
               theSquare.setAttribute('id', row + ',' + column);
               // Set the pieces.
               if (square.piece.piece === undefined) {
-                theSquare.textContent = '';
+                $(theSquare).text('');
               } else if (square.piece.piece.color) {
                 var pieceType = square.piece.piece.color.concat(square.piece.piece.type);
-                theSquare.innerHTML = sprite[pieceType];
+                $(theSquare).html(sprite[pieceType]);
               } else {
-                theSquare.textContent = '';
+                $(theSquare).text('');
               }
-              theRow.appendChild(theSquare);
+              $(theRow).append(theSquare)
               $('#board-placement').append(theRow);
             }
           });
@@ -84,19 +85,12 @@ var DrawHTML = function() {
   this.statusHTML = function() {
     var status = document.createElement('div');
     var playerName = document.createElement('div');
-    playerName.textContent = 'Player Name: ' + myGame.currentPlayer.name;
+    $(playerName).text('Player Name: ' + myGame.currentPlayer.name);
     var playerColor = document.createElement('div');
-    playerColor.textContent = 'Player Color: ' + myGame.currentPlayer.color;
+    $(playerColor).text('Player Color: ' + myGame.currentPlayer.color);
     var state = document.createElement('div');
-    state.textContent = 'Player State: ' + myGame.state;
-    if (myGame.currentPiece.piece !== undefined) {
-      var piece = document.createElement('div');
-      piece.textContent = 'Current Piece: ' + myGame.currentPiece.piece.color + " " + myGame.currentPiece.piece.type;
-      status.appendChild(piece);
-    }
-    status.appendChild(playerName);
-    status.appendChild(playerColor);
-    status.appendChild(state)
+    $(state).text('Player State: ' + myGame.state);
+    $(status).append(playerName, playerColor, state);
     return status;
   }
 
@@ -135,7 +129,7 @@ var DrawHTML = function() {
         myGame.moveSet.forEach(function(spot) {
           spot.forEach(function(move) {
             var change = document.getElementById(move.row.toString() + ',' + move.column.toString());
-            change.classList.add('path');
+            $(change).addClass('path');
           });
         });
       });
