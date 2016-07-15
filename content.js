@@ -202,28 +202,28 @@ var Game = function(players) {
    });
    myGame.board.squares.forEach(function(square) {
      if (castle === true && color === 'white' && white.kingCastle === true && myGame.currentPlayer.color === 'white') {
-       if (squares.column === 4 && squares.row === 7) {
-         squares.piece = {};
-       } if (squares.column === 7 && squares.row === 7) {
-         squares.piece = {};
+       if (square.column === 4 && square.row === 7) {
+         square.piece = {};
+       } if (square.column === 7 && square.row === 7) {
+         square.piece = {};
          myGame.nextTurn();
        }
-       if (squares.column === 6 && squares.row === 7) {
-        squares.piece = {piece: {color: 'white', type: 'king'}};
-      } else if (squares.column === 5 && squares.row === 7) {
-        squares.piece = {piece: {color: 'white', type: 'rook'}};
+       if (square.column === 6 && square.row === 7) {
+        square.piece = {piece: {color: 'white', type: 'king'}};
+      } else if (square.column === 5 && square.row === 7) {
+        square.piece = {piece: {color: 'white', type: 'rook'}};
        }
      } else if (castle === true && color === 'black' && black.kingCastle === true && myGame.currentPlayer.color === 'black') {
-       if (squares.column === 4 && squares.row === 0) {
-         squares.piece = {};
-       } else if (squares.column === 7 && squares.row === 0) {
-         squares.piece = {};
+       if (square.column === 4 && square.row === 0) {
+         square.piece = {};
+       } else if (square.column === 7 && square.row === 0) {
+         square.piece = {};
          myGame.nextTurn();
        }
-       if (squares.column === 6 && squares.row === 0) {
-        squares.piece = {piece: {color: 'black', type: 'king'}};
-      } else if (squares.column === 5 && squares.row === 0) {
-        squares.piece = {piece: {color: 'black', type: 'rook'}};
+       if (square.column === 6 && square.row === 0) {
+        square.piece = {piece: {color: 'black', type: 'king'}};
+      } else if (square.column === 5 && square.row === 0) {
+        square.piece = {piece: {color: 'black', type: 'rook'}};
        }
      }
    });
