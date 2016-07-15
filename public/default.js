@@ -126,14 +126,15 @@ var DrawHTML = function() {
           $('.path').removeClass('path');
           if (myGame.kingCheck === true) {
             self.check(myGame.currentPlayer.color);
-          } else if (myGame.lastMove.piece.type === 'pawn' && myGame.lastMove.piece.color === 'white' && (click == '0,0' || click == '0,1' || click == '0,2' || click == '0,3' || click == '0,4' || click == '0,5' || click == '0,6' || click == '0,7')) {
-              pawnPromotion('white', click);
-              socket.emit('moved');
-            } else {
+          } else {
             socket.emit('moved');
           }
         }
       });
+      // else if (myGame.lastMove.piece.type === 'pawn' && myGame.lastMove.piece.color === 'white' && (click == '0,0' || click == '0,1' || click == '0,2' || click == '0,3' || click == '0,4' || click == '0,5' || click == '0,6' || click == '0,7')) {
+      //     pawnPromotion('white', click);
+      //     socket.emit('moved');
+      //   }
     } else if (myGame.state == 'selecting'){
       request.done(function(msg) {
         myGame = msg;
