@@ -120,21 +120,25 @@ var Game = function(players) {
   }
 
   //Pawn promotion functions
-  this.checkPromotion = function(row, color, piece) {
-    if (((color === 'white' && row === 0) || (color === 'black' && row === 7)) && piece === 'pawn') {
-      myGame.pawnPromotion = true;
-    }
-  }
-  this.givePromotion = function(location, piece, color) {
-    // var coordinates = location.split(',');
-    var row = parseInt(location[0]);
-    var column = parseInt(location[1]);
-    for (const square of myGame.board.squares) {
-      if (square.row == row && square.column == column) {
-        square.piece.piece.type = piece;
+  // this.checkPromotion = function(row, color, piece) {
+  //   if (((color === 'white' && row === 0) || (color === 'black' && row === 7)) && piece === 'pawn') {
+  //     myGame.pawnPromotion = true;
+  //   }
+  // }
+  this.givePromotion = function(piece, location, color) {
+    var coordinates = location.split(',');
+    var row = coordinates[0];
+    var column = coordinates[1];
+    myGame.board.squares.forEach(function(square) {
+      if (square.row.toString() === row && square.column.toString() === column) {
         square.piece.piece.color = color;
+        if (piece !== 'knight') {
+          square.piece.piece.type = 'queen';
+        } else {
+          square.piece.piece.type = piece;
+        }
       }
-    }
+    });
   }
 
   // Check if castling is possible.
@@ -263,6 +267,7 @@ var Game = function(players) {
        }
      }
    });
+
    myGame.board.squares.forEach(function(squares) {
      if (castle === true && color === 'white' && white.queenCastle === true && myGame.currentPlayer.color === 'white') {
        if (squares.column === 0 && squares.row === 7) {

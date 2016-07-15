@@ -39,6 +39,11 @@ app.get('/king', function(req, res) {
   res.send(myGame);
 });
 
+app.post('/promotion', function(req, res) {
+  myGame.givePromotion(req.body.promotion.promote, req.body.promotion.location, req.body.promotion.color);
+  res.send(myGame);
+});
+
 io.on('connection', function(socket) {
   socket.on('chat message', function(msg) {
     io.emit('chat message', msg);

@@ -39,12 +39,6 @@ var myGame;
 var DrawHTML = function() {
   var self = this;
 
-  this.promotePawn = function () {
-    if (myGame.pawnPromotion === true) {
-      var promotion = prompt('Enter "queen" or "knight" to be promoted.');
-      return promotion;
-    }
-  }
   this.boardHTML = function() {
     var request = $.ajax({
       url: '/draw',
@@ -85,7 +79,6 @@ var DrawHTML = function() {
     myGame.board.squares.forEach(function(square) {
       var id = square.row.toString() + ',' + square.column.toString();
       var updatedSquare = document.getElementById(id);
-        // Set the pieces.
         if (square.piece.piece === undefined) {
           $(updatedSquare).text('');
         } else if (square.piece.piece.color) {
@@ -96,7 +89,6 @@ var DrawHTML = function() {
         }
     });
   }
-
 
   this.statusHTML = function() {
     var status = document.createElement('div');
@@ -117,7 +109,8 @@ var DrawHTML = function() {
 
   // Piece selection and movement event listeners.
   $(document.body).on('click', function(theEvent) {
-    var coordinates = theEvent.target.id.split(',');
+    var click = theEvent.target.id;
+    var coordinates = click.split(',');
     var id = parseInt(coordinates[0]) + ',' + parseInt(coordinates[1]);
     var request = $.ajax({
       url: '/moving',
@@ -133,7 +126,10 @@ var DrawHTML = function() {
           $('.path').removeClass('path');
           if (myGame.kingCheck === true) {
             self.check(myGame.currentPlayer.color);
-          } else {
+          } else if (myGame.lastMove.piece.type === 'pawn' && myGame.lastMove.piece.color === 'white' && (click == '0,0' || click == '0,1' || click == '0,2' || click == '0,3' || click == '0,4' || click == '0,5' || click == '0,6' || click == '0,7')) {
+              pawnPromotion('white', click);
+              socket.emit('moved');
+            } else {
             socket.emit('moved');
           }
         }
@@ -174,9 +170,22 @@ var DrawHTML = function() {
   });
 }
 
+function pawnPromotion(color, location) {
+  if (color === 'white') {
+    var promote = window.prompt('Would you like a queen or a knight?');
+    var promotion = {promote, location, color};
+    var request = $.ajax({
+      url: '/promotion',
+      method: 'POST',
+      contentType: 'application/json',
+      dataType: 'json',
+      data: JSON.stringify({promotion})
+    });
+  }
+}
+
 var draw = new DrawHTML();
 draw.boardHTML();
-
 // Shows information about the game.
 var showGame = function() {
   var status = draw.statusHTML();
