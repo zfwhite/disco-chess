@@ -10,7 +10,7 @@ io.on('connection', function(socket) {
     io.emit('chat message', msg);
   });
   socket.on('moved', function() {
-    io.emit('moved');
+    io.sockets.emit('moved');
   });
 });
 
