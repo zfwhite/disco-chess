@@ -232,7 +232,7 @@ var Game = function(players) {
  // Queen side castling.
  this.queenSide = function(color) {
    var castle = true;
-   for (const square of myGame.board.squares) {
+   myGame.board.squares.forEach(function(square) {
      if (color === 'white' && myGame.currentPlayer.color === 'white') {
        if (square.column === 1 && square.row === 7) {
          if (square.piece.piece !== undefined) {
@@ -262,8 +262,8 @@ var Game = function(players) {
          }
        }
      }
-   }
-   for (const squares of myGame.board.squares) {
+   });
+   myGame.board.squares.forEach(function(squares) {
      if (castle === true && color === 'white' && white.queenCastle === true && myGame.currentPlayer.color === 'white') {
        if (squares.column === 0 && squares.row === 7) {
          squares.piece = {};
@@ -293,7 +293,7 @@ var Game = function(players) {
         squares.piece = {piece: {color: 'black', type: 'rook'}};
        }
      }
-   }
+   });
  }
 
  this.kingCheck = false;
