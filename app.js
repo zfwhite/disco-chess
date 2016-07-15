@@ -5,6 +5,15 @@ var io = require('socket.io')(http);
 var jsonParser = require('body-parser').json();
 var myGame = require('./content');
 
+io.on('connection', function(socket) {
+  socket.on('chat message', function(msg) {
+    io.emit('chat message', msg);
+  });
+  socket.on('moved', function() {
+    io.emit('moved');
+  });
+});
+
 app.use(jsonParser);
 app.use(express.static(__dirname + '/public'));
 
@@ -42,15 +51,6 @@ app.get('/king', function(req, res) {
 app.post('/promotion', function(req, res) {
   myGame.givePromotion(req.body.promotion.promote, req.body.promotion.location, req.body.promotion.color);
   res.send(myGame);
-});
-
-io.on('connection', function(socket) {
-  socket.on('chat message', function(msg) {
-    io.emit('chat message', msg);
-  });
-  socket.on('moved', function() {
-    io.emit('moved');
-  });
 });
 
 http.listen(process.env.PORT || 3000);
