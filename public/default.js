@@ -13,8 +13,7 @@ socket.on('chat message', function(msg) {
 });
 
 socket.on('moved', function() {
-  $('#board-placement').empty();
-  draw.boardHTML();
+  draw.updateBoard();
 });
 
 function updateScroll() {
@@ -82,6 +81,28 @@ var DrawHTML = function() {
     });
   }
 
+  this.updateBoard = function() {
+    for (var row = 0; row <= 7; row++) {
+      for (var column = 0; column <= 7; column++) {
+        myGame.board.squares.forEach(function(square) {
+          var id = square.row.toString() + ',' + square.column.toString();
+          var updatedSquare = document.getElementById(id);
+          if (square.row == row && square.column == column) {
+            // Set the pieces.
+            if (square.piece.piece === undefined) {
+              $(updatedSquare).text('');
+            } else if (square.piece.piece.color) {
+              var pieceType = square.piece.piece.color.concat(square.piece.piece.type);
+              $(updatedSquare).html(sprite[pieceType]);
+            } else {
+              $(updatedSquare).text('');
+            }
+          }
+        });
+      }
+    }
+  }
+
   this.statusHTML = function() {
     var status = document.createElement('div');
     var playerName = document.createElement('div');
@@ -96,8 +117,7 @@ var DrawHTML = function() {
 
   this.check = function(color) {
     window.alert(color + ' king is in check!');
-    $('#board-placement').empty();
-    draw.boardHTML();
+    draw.updateBoard();
   }
 
   // Piece selection and movement event listeners.
