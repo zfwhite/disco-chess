@@ -1,4 +1,4 @@
-var socket = io();
+var socket = io({'multiplex': false});
 
 // Chat feature.
 $('form').submit(function() {
