@@ -157,44 +157,25 @@ var DrawHTML = function() {
   });
   // Castling and unselecting button event listeners.
   $(document.body).on('click', function(theEvent) {
+    var path;
     if (theEvent.target.getAttribute('queen-castle')) {
-      var request = $.ajax({
-        method: 'GET',
-        url: '/queen',
-        dataType: 'json'
-      }).done(function(msg) {
-        myGame = msg;
-        socket.emit('moved');
-      });
+      path = '/queen';
     } else if (theEvent.target.getAttribute('king-castle')) {
-      var request = $.ajax({
-        method: 'GET',
-        url: '/king',
-        dataType: 'json'
-      }).done(function(msg) {
-        myGame = msg;
-        socket.emit('moved');
-      });
+      path = '/king';
     } else if (theEvent.target.getAttribute('data-unselect')) {
-      var request = $.ajax({
-        method: 'GET',
-        url: '/unselect',
-        dataType: 'json'
-      }).done(function(msg) {
-        myGame = msg;
-        socket.emit('moved');
-      });
+      path = '/unselect';
       $('.path').removeClass('path');
     } else if (theEvent.target.getAttribute('reset')) {
-      var request = $.ajax({
-        method: 'GET',
-        url: '/reset',
-        dataType: 'json'
-      }).done(function(msg) {
-        myGame = msg;
-        socket.emit('moved');
-      });
+      path = '/reset';
     }
+    var request = $.ajax({
+      method: 'GET',
+      url: path,
+      dataType: 'json'
+    }).done(function(msg) {
+      myGame = msg;
+      socket.emit('moved');
+    });
   });
 }
 
