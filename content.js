@@ -177,7 +177,7 @@ var Game = function(players) {
   // Makes the kingside castle move.
  this.kingSide = function(color) {
    var castle = true;
-   for (const square of myGame.board.squares) {
+   myGame.board.squares.forEach(function(square) {
      if (color === 'white' && myGame.currentPlayer.color === 'white') {
        if (square.column === 6 && square.row === 7) {
          if (square.piece.piece !== undefined) {
@@ -199,8 +199,8 @@ var Game = function(players) {
          }
        }
      }
-   }
-   for (const squares of myGame.board.squares) {
+   });
+   myGame.board.squares.forEach(function(square) {
      if (castle === true && color === 'white' && white.kingCastle === true && myGame.currentPlayer.color === 'white') {
        if (squares.column === 4 && squares.row === 7) {
          squares.piece = {};
@@ -226,7 +226,7 @@ var Game = function(players) {
         squares.piece = {piece: {color: 'black', type: 'rook'}};
        }
      }
-   }
+   });
  }
 
  // Queen side castling.
