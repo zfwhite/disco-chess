@@ -12,8 +12,8 @@ socket.on('chat message', function(msg) {
   updateScroll();
 });
 
-socket.on('moved', function() {
-  draw.updateBoard();
+socket.on('moved', function(board) {
+  draw.updateBoard(board);
 });
 
 function updateScroll() {
@@ -75,8 +75,8 @@ var DrawHTML = function() {
     });
   }
 
-  this.updateBoard = function() {
-    myGame.board.squares.forEach(function(square) {
+  this.updateBoard = function(game) {
+    game.board.squares.forEach(function(square) {
       var id = square.row.toString() + ',' + square.column.toString();
       var updatedSquare = document.getElementById(id);
         if (square.piece.piece === undefined) {
@@ -126,14 +126,15 @@ var DrawHTML = function() {
           $('.path').removeClass('path');
           if (myGame.kingCheck === true) {
             self.check(myGame.currentPlayer.color);
-          } else if (myGame.lastMove.piece.type === 'pawn' && myGame.lastMove.piece.color === 'white' && (click == '0,0' || click == '0,1' || click == '0,2' || click == '0,3' || click == '0,4' || click == '0,5' || click == '0,6' || click == '0,7')) {
-              pawnPromotion('white', click);
-              socket.emit('moved');
-            } else {
-            socket.emit('moved');
+          } else {
+            socket.emit('moved', myGame);
           }
         }
       });
+      // else if (myGame.lastMove.piece.type === 'pawn' && myGame.lastMove.piece.color === 'white' && (click == '0,0' || click == '0,1' || click == '0,2' || click == '0,3' || click == '0,4' || click == '0,5' || click == '0,6' || click == '0,7')) {
+      //     pawnPromotion('white', click);
+      //     socket.emit('moved');
+      //   }
     } else if (myGame.state == 'selecting'){
       request.done(function(msg) {
         myGame = msg;
@@ -165,7 +166,7 @@ var DrawHTML = function() {
       dataType: 'json'
     }).done(function(msg) {
       myGame = msg;
-      socket.emit('moved');
+      socket.emit('moved', myGame);
     });
   });
 }
