@@ -12,7 +12,7 @@ socket.on('chat message', function(msg) {
   updateScroll();
 });
 
-socket.on('moved', function() {
+socket.on('moved', function(id) {
   draw.updateBoard();
 });
 
@@ -127,7 +127,7 @@ var DrawHTML = function() {
           if (myGame.kingCheck === true) {
             self.check(myGame.currentPlayer.color);
           } else {
-            socket.emit('moved');
+            socket.emit('moved', myGame);
           }
         }
       });
@@ -166,7 +166,7 @@ var DrawHTML = function() {
       dataType: 'json'
     }).done(function(msg) {
       myGame = msg;
-      socket.emit('moved');
+      socket.emit('moved', myGame);
     });
   });
 }
