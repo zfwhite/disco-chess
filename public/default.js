@@ -12,8 +12,8 @@ socket.on('chat message', function(msg) {
   updateScroll();
 });
 
-socket.on('moved', function(id) {
-  draw.updateBoard();
+socket.on('moved', function(board) {
+  draw.updateBoard(board);
 });
 
 function updateScroll() {
@@ -75,8 +75,8 @@ var DrawHTML = function() {
     });
   }
 
-  this.updateBoard = function() {
-    myGame.board.squares.forEach(function(square) {
+  this.updateBoard = function(game) {
+    game.board.squares.forEach(function(square) {
       var id = square.row.toString() + ',' + square.column.toString();
       var updatedSquare = document.getElementById(id);
         if (square.piece.piece === undefined) {
@@ -166,7 +166,7 @@ var DrawHTML = function() {
       dataType: 'json'
     }).done(function(msg) {
       myGame = msg;
-      socket.emit('moved', myGame);
+      socket.emit('moved');
     });
   });
 }

@@ -9,8 +9,8 @@ io.on('connection', function(socket) {
   socket.on('chat message', function(msg) {
     io.emit('chat message', msg);
   });
-  socket.on('moved', function(id) {
-    io.emit('moved', id);
+  socket.on('moved', function(board) {
+    io.emit('moved', board);
   });
 });
 
