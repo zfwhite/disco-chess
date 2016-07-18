@@ -49,7 +49,7 @@ app.get('/king', function(req, res) {
 });
 
 app.post('/promotion', function(req, res) {
-  myGame.givePromotion(req.body.promotion.promote, req.body.promotion.location, req.body.promotion.color);
+  myGame.givePromotion(req.body.promotion.promote, req.body.promotion.location, req.body.promotion.pieceColor);
   res.send(myGame);
 });
 

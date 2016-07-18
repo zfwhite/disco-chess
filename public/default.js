@@ -126,15 +126,13 @@ var DrawHTML = function() {
           $('.path').removeClass('path');
           if (myGame.kingCheck === true) {
             self.check(myGame.currentPlayer.color);
+          } else if (myGame.lastMove.piece.type === 'pawn' && coordinates[0] == 0 || coordinates[0] == 7) {
+              pawnPromotion(myGame.currentPlayer.color, click);
           } else {
-            socket.emit('moved', myGame);
+              socket.emit('moved', myGame);
           }
         }
       });
-      // else if (myGame.lastMove.piece.type === 'pawn' && myGame.lastMove.piece.color === 'white' && (click == '0,0' || click == '0,1' || click == '0,2' || click == '0,3' || click == '0,4' || click == '0,5' || click == '0,6' || click == '0,7')) {
-      //     pawnPromotion('white', click);
-      //     socket.emit('moved');
-      //   }
     } else if (myGame.state == 'selecting'){
       request.done(function(msg) {
         myGame = msg;
@@ -172,17 +170,24 @@ var DrawHTML = function() {
 }
 
 function pawnPromotion(color, location) {
-  if (color === 'white') {
-    var promote = window.prompt('Would you like a queen or a knight?');
-    var promotion = {promote, location, color};
-    var request = $.ajax({
-      url: '/promotion',
-      method: 'POST',
-      contentType: 'application/json',
-      dataType: 'json',
-      data: JSON.stringify({promotion})
-    });
+  var promote = window.prompt('Would you like a queen or a knight?');
+  var pieceColor;
+  if (color == 'white') {
+    pieceColor = 'black';
+  } else {
+    pieceColor = 'white';
   }
+  var promotion = {promote, location, pieceColor};
+  var request = $.ajax({
+    url: '/promotion',
+    method: 'POST',
+    contentType: 'application/json',
+    dataType: 'json',
+    data: JSON.stringify({promotion})
+  }).done(function(msg) {
+    myGame = msg;
+    socket.emit('moved', myGame);
+  });
 }
 
 var draw = new DrawHTML();

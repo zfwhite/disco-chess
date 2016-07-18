@@ -119,12 +119,6 @@ var Game = function(players) {
     self.state = 'selecting'
   }
 
-  //Pawn promotion functions
-  // this.checkPromotion = function(row, color, piece) {
-  //   if (((color === 'white' && row === 0) || (color === 'black' && row === 7)) && piece === 'pawn') {
-  //     myGame.pawnPromotion = true;
-  //   }
-  // }
   this.givePromotion = function(piece, location, color) {
     var coordinates = location.split(',');
     var row = coordinates[0];
@@ -410,18 +404,6 @@ var Game = function(players) {
                     square.piece = {};
                   }
                 });
-                //Promote pawn
-                // myGame.checkPromotion(square.row, legal.piece.piece.color, legal.piece.piece.type);
-                // if (myGame.pawnPromotion === true) {
-                //   var promote = draw.promotePawn();
-                //   if (promote === 'queen' || promote === 'knight') {
-                //     myGame.givePromotion(coordinateMove, promote, myGame.currentPlayer.color)
-                //     myGame.pawnPromotion = false;
-                //   } else {
-                //     myGame.givePromotion(coordinateMove, 'queen', myGame.currentPlayer.color)
-                //     myGame.pawnPromotion = false;
-                //   }
-                // }
                 myGame.nextTurn();
               }
             });
