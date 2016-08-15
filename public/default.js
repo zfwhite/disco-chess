@@ -126,7 +126,7 @@ var DrawHTML = function() {
           $('.path').removeClass('path');
           if (myGame.kingCheck === true) {
             self.check(myGame.currentPlayer.color);
-          } else if (myGame.lastMove.piece.type === 'pawn' && coordinates[0] == 0 || coordinates[0] == 7) {
+          } else if (myGame.lastMove.piece.type === 'pawn' && (coordinates[0] == 0 || coordinates[0] == 7)) {
               pawnPromotion(myGame.currentPlayer.color, click);
           } else {
               socket.emit('moved', myGame);
@@ -150,8 +150,10 @@ var DrawHTML = function() {
     var path;
     if (theEvent.target.getAttribute('queen-castle')) {
       path = '/queen';
+      $('.path').removeClass('path');
     } else if (theEvent.target.getAttribute('king-castle')) {
       path = '/king';
+      $('.path').removeClass('path');
     } else if (theEvent.target.getAttribute('data-unselect')) {
       path = '/unselect';
       $('.path').removeClass('path');

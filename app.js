@@ -3,6 +3,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var jsonParser = require('body-parser').json();
+var cookieParser = require('cookie-parser');
 var myGame = require('./content');
 
 io.on('connection', function(socket) {
@@ -14,6 +15,7 @@ io.on('connection', function(socket) {
   });
 });
 
+app.use(cookieParser());
 app.use(jsonParser);
 app.use(express.static(__dirname + '/public'));
 
