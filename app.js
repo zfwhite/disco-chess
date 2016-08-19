@@ -14,7 +14,6 @@ io.on('connection', function(socket) {
   });
 });
 
-app.use(cookieParser());
 app.use(jsonParser);
 app.use(express.static(__dirname + '/public'));
 
