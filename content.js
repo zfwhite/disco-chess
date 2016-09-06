@@ -522,37 +522,23 @@ function collision(possibleMoves, currentLocation, color) {
       if (square.row === x && square.column === y) {
         var distance = Math.sqrt(((x1 - x)*(x1 - x)) + ((y1 - y)*(y1 - y)));
         var testDistance = {};
+        testDistance.distance = distance;
+        testDistance.square = square;
         if ((x1 < x) && (y1 === y)) {
-          testDistance.distance = distance;
-          testDistance.square = square;
           xIncrease.push(testDistance);
         } else if (x1 === x && y1 < y) {
-          testDistance.distance = distance;
-          testDistance.square = square;
           yIncrease.push(testDistance);
         } else if (x1 > x && y1 === y) {
-          testDistance.distance = distance;
-          testDistance.square = square;
           xDecrease.push(testDistance);
         } else if (x1 === x && y1 > y) {
-          testDistance.distance = distance;
-          testDistance.square = square;
           yDecrease.push(testDistance);
         } else if (x1 < x && y1 < y) {
-          testDistance.distance = distance;
-          testDistance.square = square;
           bothIncrease.push(testDistance);
         } else if (x1 > x && y1 > y) {
-          testDistance.distance = distance;
-          testDistance.square = square;
           bothDecrease.push(testDistance);
         } else if (x1 < x && y1 > y) {
-          testDistance.distance = distance;
-          testDistance.square = square;
           xIncreaseYDecrease.push(testDistance);
         } else if (x1 > x && y1 < y) {
-          testDistance.distance = distance;
-          testDistance.square = square;
           xDecreaseYIncrease.push(testDistance);
         }
       }
