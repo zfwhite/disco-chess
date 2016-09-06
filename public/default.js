@@ -159,6 +159,7 @@ var DrawHTML = function() {
       $('.path').removeClass('path');
     } else if (theEvent.target.getAttribute('reset')) {
       path = '/reset';
+      $('.path').removeClass('path');
     }
     var request = $.ajax({
       method: 'GET',

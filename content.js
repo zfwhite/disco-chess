@@ -73,19 +73,6 @@ var Piece = function(type, color) {
 }
 var Game = function(players) {
   var self = this;
-  this.board = new Board();
-  this.players = players;
-  this.currentPlayer = {};
-  this.currentPiece = {};
-  this.moveSet = {};
-  this.state = '';
-  this.lastLocation = '';
-
-  this.removedPiece = {};
-  this.lastMove = {};
-
-
-  this.pawnPromotion = false;
 
   this.reset = function() {
     self.board = new Board();
@@ -425,6 +412,7 @@ var white = new Player('Player 1', 'white');
 var black = new Player('Player 2', 'black');
 var myGame = new Game([white, black]);
 
+myGame.reset();
 myGame.start();
 
 function checkMoves(square) {
