@@ -53,7 +53,7 @@
     left: 180px;
     width: 160px;
     background: #0093D1;
-    position: fixed;
+    position: absolute;
     height: 380px;
     overflow-y: auto;
     z-index: 0;
@@ -151,7 +151,7 @@
     left: 250px;
     width: 220px;
     background: #0093D1;
-    position: fixed;
+    position: absolute;
     height: 520px;
     overflow-y: auto;
     z-index: 0;
@@ -195,4 +195,16 @@
   #page-content-wrapper {
     width: 100%;
   }
+}
+
+.email-output {
+  height: 100px;
+  border: 1px solid black;
+  overflow: scroll;
+}
+
+.email-input {
+  height: 200px;
+  margin-top: 50px;
+  margin-bottom: 10px;
 }

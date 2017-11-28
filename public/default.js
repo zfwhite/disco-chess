@@ -201,3 +201,31 @@ var showGame = function() {
   $('#information').html('').append(status);
 }
 setInterval(showGame, 1000);
+
+$(document).on('click', '.remove-dupes', function() {
+  var dupeInfo = removeDuplicates($('.email-list-input').val());
+
+  console.log(dupeInfo);
+
+  $('.email-output').html(dupeInfo.uniqueEmails);
+  $('.email-output').append("<br>########################################");
+  $('.email-output').append("<br>Starting count: " + dupeInfo.origCount);
+  $('.email-output').append("<br>Number of duplicates removed: " + (dupeInfo.origCount - dupeInfo.finalCount));
+})
+
+function removeDuplicates(string) {
+
+  var emailList = string.split(',');
+  var uniqueEmails = emailList.filter(function(elem, index, self) {
+    return index == self.indexOf(elem)
+  });
+  var origCount = emailList.length;
+
+  var finalCount = uniqueEmails.length;
+
+  return {
+    origCount: origCount,
+    finalCount: finalCount,
+    uniqueEmails: uniqueEmails.join(',')
+  }
+}
