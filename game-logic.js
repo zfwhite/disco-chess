@@ -1,3 +1,6 @@
+const { Bishop, King, Knight, Pawn, Queen, Rook } = require('./lib/pieces/');
+const Player = require('./lib/player.js');
+
 var Board = function() {
   this.squares = [];
   var self = this;
@@ -16,39 +19,39 @@ var Board = function() {
     }
   }
   this.starting = [
-    { position: [0, 0], piece: new Piece('rook', 'black')},
-    { position: [0, 1], piece: new Piece('knight', 'black')},
-    { position: [0, 2], piece: new Piece('bishop', 'black')},
-    { position: [0, 3], piece: new Piece('queen', 'black')},
-    { position: [0, 4], piece: new Piece('king', 'black')},
-    { position: [0, 5], piece: new Piece('bishop', 'black')},
-    { position: [0, 6], piece: new Piece('knight', 'black')},
-    { position: [0, 7], piece: new Piece('rook', 'black')},
-    { position: [1, 0], piece: new Piece('pawn', 'black')},
-    { position: [1, 1], piece: new Piece('pawn', 'black')},
-    { position: [1, 2], piece: new Piece('pawn', 'black')},
-    { position: [1, 3], piece: new Piece('pawn', 'black')},
-    { position: [1, 4], piece: new Piece('pawn', 'black')},
-    { position: [1, 5], piece: new Piece('pawn', 'black')},
-    { position: [1, 6], piece: new Piece('pawn', 'black')},
-    { position: [1, 7], piece: new Piece('pawn', 'black')},
+    { position: [0, 0], piece: new Rook('black')},
+    { position: [0, 1], piece: new Knight('black')},
+    { position: [0, 2], piece: new Bishop('black')},
+    { position: [0, 3], piece: new Queen('black')},
+    { position: [0, 4], piece: new King('black')},
+    { position: [0, 5], piece: new Bishop('black')},
+    { position: [0, 6], piece: new Knight('black')},
+    { position: [0, 7], piece: new Rook('black')},
+    { position: [1, 0], piece: new Pawn('black')},
+    { position: [1, 1], piece: new Pawn('black')},
+    { position: [1, 2], piece: new Pawn('black')},
+    { position: [1, 3], piece: new Pawn('black')},
+    { position: [1, 4], piece: new Pawn('black')},
+    { position: [1, 5], piece: new Pawn('black')},
+    { position: [1, 6], piece: new Pawn('black')},
+    { position: [1, 7], piece: new Pawn('black')},
     // White
-    { position: [7, 0], piece: new Piece('rook', 'white')},
-    { position: [7, 1], piece: new Piece('knight', 'white')},
-    { position: [7, 2], piece: new Piece('bishop', 'white')},
-    { position: [7, 3], piece: new Piece('queen', 'white')},
-    { position: [7, 4], piece: new Piece('king', 'white')},
-    { position: [7, 5], piece: new Piece('bishop', 'white')},
-    { position: [7, 6], piece: new Piece('knight', 'white')},
-    { position: [7, 7], piece: new Piece('rook', 'white')},
-    { position: [6, 0], piece: new Piece('pawn', 'white')},
-    { position: [6, 1], piece: new Piece('pawn', 'white')},
-    { position: [6, 2], piece: new Piece('pawn', 'white')},
-    { position: [6, 3], piece: new Piece('pawn', 'white')},
-    { position: [6, 4], piece: new Piece('pawn', 'white')},
-    { position: [6, 5], piece: new Piece('pawn', 'white')},
-    { position: [6, 6], piece: new Piece('pawn', 'white')},
-    { position: [6, 7], piece: new Piece('pawn', 'white')},
+    { position: [7, 0], piece: new Rook('white')},
+    { position: [7, 1], piece: new Knight('white')},
+    { position: [7, 2], piece: new Bishop('white')},
+    { position: [7, 3], piece: new Queen('white')},
+    { position: [7, 4], piece: new King('white')},
+    { position: [7, 5], piece: new Bishop('white')},
+    { position: [7, 6], piece: new Knight('white')},
+    { position: [7, 7], piece: new Rook('white')},
+    { position: [6, 0], piece: new Pawn('white')},
+    { position: [6, 1], piece: new Pawn('white')},
+    { position: [6, 2], piece: new Pawn('white')},
+    { position: [6, 3], piece: new Pawn('white')},
+    { position: [6, 4], piece: new Pawn('white')},
+    { position: [6, 5], piece: new Pawn('white')},
+    { position: [6, 6], piece: new Pawn('white')},
+    { position: [6, 7], piece: new Pawn('white')},
   ]
   // Put the pieces on the squares.
   this.starting.forEach(function(piece) {
@@ -123,7 +126,7 @@ var Game = function(players) {
   }
 
   // Check if castling is possible.
-  this.castleCheck = function(color) {
+  this.canCastle = function(color) {
     myGame.board.squares.forEach(function(square) {
       if (color === 'white') {
         if (square.column === 4 && square.row === 7) {
@@ -336,15 +339,15 @@ var Game = function(players) {
     if (myGame.state == 'selecting') {
       if (myGame.currentPlayer.color === 'white') {
         if (white.kingCastle === true) {
-          myGame.castleCheck(self.currentPlayer.color);
+          myGame.canCastle(self.currentPlayer.color);
         } else if (white.queenCastle === true) {
-          myGame.castleCheck(self.currentPlayer.color);
+          myGame.canCastle(self.currentPlayer.color);
         }
       } else if (myGame.currentPlayer.color === 'black') {
         if (black.kingCastle === true) {
-          myGame.castleCheck(self.currentPlayer.color);
+          myGame.canCastle(self.currentPlayer.color);
         } else if (black.queenCastle === true) {
-          myGame.castleCheck(self.currentPlayer.color);
+          myGame.canCastle(self.currentPlayer.color);
         }
       }
       var coordinate = click.split(',');
@@ -401,13 +404,6 @@ var Game = function(players) {
   }
 }
 
-var Player = function(name, color) {
-  this.name = name;
-  this.color = color;
-  // Allows castling while true.
-  this.kingCastle = true;
-  this.queenCastle = true;
-}
 var white = new Player('Player 1', 'white');
 var black = new Player('Player 2', 'black');
 var myGame = new Game([white, black]);
@@ -416,321 +412,12 @@ myGame.reset();
 myGame.start();
 
 function checkMoves(square) {
-  var moveSet = new MoveSets();
   if (square.piece.piece != undefined) {
     var color = square.piece.piece.color;
     var location = square.row + "," + square.column;
     myGame.lastLocation = location;
-    switch (square.piece.piece.type) {
-      case "pawn":
-        var moves = moveSet.pawn(location, color);
-        myGame.moveSet = pawnCollision(moves, location, color);
-        break;
-      case "rook":
-        var moves = moveSet.rook(location);
-        myGame.moveSet = collision(moves, location, color);
-        break;
-      case "knight":
-        var moves = moveSet.knight(location);
-        myGame.moveSet = knightCollision(moves, color);
-        break;
-      case "bishop":
-        var moves = moveSet.bishop(location);
-        myGame.moveSet = collision(moves, location, color);
-        break;
-      case "queen":
-        var moves = moveSet.queen(location);
-        myGame.moveSet = collision(moves, location, color);
-        break;
-      case "king":
-        var moves = moveSet.king(location);
-        myGame.moveSet = collision(moves, location, color);
-        break;
-    }
-  }
-}
 
-function pawnCollision(possibleMoves, currentLocation, color) {
-  var originalCoordinates = currentLocation.split(',');
-  var row = originalCoordinates[0];
-  var column = originalCoordinates[1];
-
-  var legalMoves = [];
-  var workingPawn = [];
-
-  myGame.board.squares.forEach(function(square) {
-    possibleMoves.forEach(function(move) {
-      var coordinate = move.split(',');
-      var x = parseInt(coordinate[0]);
-      var y = parseInt(coordinate[1]);
-      if (square.row === x && square.column === y) {
-        if (square.piece.piece === undefined && square.column == column) {
-          legalMoves.push(square);
-        } else if (square.piece.piece !== undefined && square.piece.piece.color !== color && square.column != column) {
-          legalMoves.push(square);
-        }
-      }
-    });
-  })
-  workingPawn.push(legalMoves);
-  return workingPawn;
-}
-
-function knightCollision(possibleMoves, color) {
-
-  var legalMoves = [];
-  var workingKnight = [];
-
-  myGame.board.squares.forEach(function(square) {
-    possibleMoves.forEach(function(move) {
-      var coordinate = move.split(',');
-      var x = parseInt(coordinate[0]);
-      var y = parseInt(coordinate[1]);
-      if (square.row === x && square.column === y) {
-        if (square.piece.piece === undefined) {
-          legalMoves.push(square);
-        } else if (square.piece.piece.color !== color) {
-          legalMoves.push(square);
-        }
-      }
-    });
-  })
-  workingKnight.push(legalMoves);
-  return workingKnight;
-}
-
-//Collision detection
-function collision(possibleMoves, currentLocation, color) {
-  currentCoordinate = currentLocation.split(',');
-  var x1 = parseInt(currentCoordinate[0]);
-  var y1 = parseInt(currentCoordinate[1]);
-  var actualMoves = [];
-  var xIncrease = [];
-      xDecrease = [];
-      yIncrease = [];
-      yDecrease = [];
-      bothIncrease = [];
-      bothDecrease = [];
-      xIncreaseYDecrease = [];
-      xDecreaseYIncrease = [];
-
-  possibleMoves.forEach(function(move) {
-    var coordinate = move.split(',');
-    var x = parseInt(coordinate[0]);
-    var y = parseInt(coordinate[1]);
-    myGame.board.squares.forEach(function(square) {
-      if (square.row === x && square.column === y) {
-        var distance = Math.sqrt(((x1 - x)*(x1 - x)) + ((y1 - y)*(y1 - y)));
-        var testDistance = {};
-        testDistance.distance = distance;
-        testDistance.square = square;
-        if ((x1 < x) && (y1 === y)) {
-          xIncrease.push(testDistance);
-        } else if (x1 === x && y1 < y) {
-          yIncrease.push(testDistance);
-        } else if (x1 > x && y1 === y) {
-          xDecrease.push(testDistance);
-        } else if (x1 === x && y1 > y) {
-          yDecrease.push(testDistance);
-        } else if (x1 < x && y1 < y) {
-          bothIncrease.push(testDistance);
-        } else if (x1 > x && y1 > y) {
-          bothDecrease.push(testDistance);
-        } else if (x1 < x && y1 > y) {
-          xIncreaseYDecrease.push(testDistance);
-        } else if (x1 > x && y1 < y) {
-          xDecreaseYIncrease.push(testDistance);
-        }
-      }
-    });
-  });
-
-  //Takes array of objects with squares in them and orders them by distance
-  //from shortest distance to location to largest distance.
-  var checkXIncrease = pathEnd(xIncrease);
-  var checkXDecrease = pathEnd(xDecrease);
-  var checkYIncrease = pathEnd(yIncrease);
-  var checkYDecrease = pathEnd(yDecrease);
-  var checkBothIncrease = pathEnd(bothIncrease);
-  var checkBothDecrease = pathEnd(bothDecrease);
-  var checkXIncreaseYDecrease = pathEnd(xIncreaseYDecrease);
-  var checkXDecreaseYIncrease = pathEnd(xDecreaseYIncrease);
-
-  actualMoves.push(getMoves(checkXIncrease, color));
-  actualMoves.push(getMoves(checkXDecrease, color));
-  actualMoves.push(getMoves(checkYIncrease, color));
-  actualMoves.push(getMoves(checkYDecrease, color));
-  actualMoves.push(getMoves(checkBothIncrease, color));
-  actualMoves.push(getMoves(checkBothDecrease, color));
-  actualMoves.push(getMoves(checkXIncreaseYDecrease, color));
-  actualMoves.push(getMoves(checkXDecreaseYIncrease, color));
-
-  return actualMoves;
-}
-//Function to check whether or not a space has an existing piece in it
-//check color of piece in order to decide whether or not piece should be
-//returned in array.
-function getMoves(array, color) {
-  var legalMoves = [];
-
-  for (var i = 0; i < array.length; i++) {
-    if (array[i].square.piece.piece !== undefined) {
-      if(array[i].square.piece.piece.color === color) {
-        return legalMoves;
-      } else {
-        legalMoves.push(array[i].square);
-        return legalMoves;
-      }
-    } else {
-      legalMoves.push(array[i].square);
-    }
-  }
-  return legalMoves;
-}
-// Orders the moves in the array from smallest to largest.
-function pathEnd(array) {
-  array.sort(function(a, b) {
-    if (a.distance > b.distance) {
-      return 1;
-    } else if (a.distance < b.distance) {
-      return -1;
-    }
-  });
-  return array;
-}
-
-//Add to moveSets.
-var MoveSets = function() {
-  this.king = function(location) {
-    var coordinate = location.split(',');
-    var x = parseInt(coordinate[0]);
-    var y = parseInt(coordinate[1]);
-    var possibleMoves = [];
-    for (var row = 0; row <= 7; row++) {
-      for (var column = 0; column <= 7; column++) {
-        if (row === x || row === x + 1 || row === x - 1) {
-          if (column === y || column === y + 1 || column === y - 1) {
-            var legal = row.toString() + ',' + column.toString();
-            possibleMoves.push(legal);
-          }
-        }
-      }
-    }
-    var remove = possibleMoves.indexOf(location);
-    possibleMoves.splice(remove, 1);
-    return possibleMoves;
-  }
-  this.rook = function(location) {
-    var coordinate = location.split(',');
-    var x = parseInt(coordinate[0]);
-    var y = parseInt(coordinate[1]);
-    var possibleMoves = [];
-    for (var row = 0; row <= 7; row++) {
-      for (var column = 0; column <= 7; column++) {
-        var legal = row.toString() + ',' + column.toString();
-        if (row === x) {
-          possibleMoves.push(legal);
-        } else if (column === y) {
-          possibleMoves.push(legal);
-        }
-      }
-    }
-    var remove = possibleMoves.indexOf(location);
-    possibleMoves.splice(remove, 1);
-    return possibleMoves;
-  }
-  this.bishop = function(location) {
-    var coordinate = location.split(',');
-    var x = parseInt(coordinate[0]);
-    var y = parseInt(coordinate[1]);
-    var possibleMoves = [];
-    for (var row = 0; row <= 7; row++) {
-      for (var column = 0; column <= 7; column++) {
-        var legal = row.toString() + ',' + column.toString();
-        if (row - x === column - y) {
-          possibleMoves.push(legal);
-        } else if (column + row === y + x) {
-          possibleMoves.push(legal);
-        }
-      }
-    }
-    var remove = possibleMoves.indexOf(location);
-    possibleMoves.splice(remove, 1);
-    return possibleMoves;
-  }
-  this.knight = function(location) {
-    var coordinate = location.split(',');
-    var x = parseInt(coordinate[0]);
-    var y = parseInt(coordinate[1]);
-    var possibleMoves = [];
-    for (var row = 0; row <= 7; row++) {
-      for (var column = 0; column <= 7; column++) {
-        var legal = row.toString() + ',' + column.toString();
-        if (x === row + 2 || x === row - 2) {
-          if (y === column + 1 || y === column - 1) {
-            possibleMoves.push(legal);
-          }
-        } else if (x === row + 1 || x === row - 1) {
-          if (y === column + 2 || y === column - 2) {
-            possibleMoves.push(legal);
-          }
-        }
-      }
-    }
-    return possibleMoves;
-  }
-  this.queen = function(location) {
-    var coordinate = location.split(',');
-    var x = parseInt(coordinate[0]);
-    var y = parseInt(coordinate[1]);
-    var possibleMoves = [];
-    for (var row = 0; row <= 7; row++) {
-      for (var column = 0; column <= 7; column++) {
-        var legal = row.toString() + ',' + column.toString();
-        if (row - x === column - y) {
-          possibleMoves.push(legal);
-        } else if (column + row === y + x) {
-          possibleMoves.push(legal);
-        } else if (row === x) {
-          possibleMoves.push(legal);
-        } else if (column === y) {
-          possibleMoves.push(legal);
-        }
-      }
-    }
-    var remove = possibleMoves.indexOf(location);
-    possibleMoves.splice(remove, 1);
-    return possibleMoves;
-  }
-
-  this.pawn = function(location, color) {
-    var coordinate = location.split(',');
-    var x = parseInt(coordinate[0]);
-    var y = parseInt(coordinate[1]);
-    var possibleMoves = [];
-    for (var row = 0; row <= 7; row++) {
-      for (var column = 0; column <= 7; column++) {
-        var legal = row.toString() + ',' + column.toString();
-        if ((row === x - 1) && color === 'white') {
-          if (column === y || column === y + 1 || column === y - 1) {
-              possibleMoves.push(legal);
-          }
-        } else if ((row === x + 1 ) && color === 'black') {
-          if (column === y || column === y + 1 || column === y - 1) {
-              possibleMoves.push(legal);
-          }
-        } else if ((row === x - 2) && (color === 'white') && x === 6) {
-          if (column === y) {
-            possibleMoves.push(legal);
-          }
-        } else if ((row === x + 2) && (color === 'black') && x === 1) {
-          if (column === y) {
-            possibleMoves.push(legal);
-          }
-        }
-      }
-    }
-    return possibleMoves;
+    myGame.moveSet = square.piece.piece.availableMoves(location, myGame);
   }
 }
 

@@ -3,7 +3,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var jsonParser = require('body-parser').json();
-var myGame = require('./content');
+var myGame = require('./game-logic');
 
 io.on('connection', function(socket) {
   socket.on('chat message', function(msg) {
